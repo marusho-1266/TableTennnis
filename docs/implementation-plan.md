@@ -44,12 +44,12 @@
 **Description:** Vite + React + TypeScript のアプリ骨格と、仕様どおりの npm scripts、ESLint、Prettier、Vitest、Playwright を用意する。
 
 **Acceptance criteria:**
-- [ ] `npm run dev` / `lint` / `typecheck` / `test` / `build` が成功する
-- [ ] `src/` 配下のディレクトリが仕様の Project Structure に沿っている
-- [ ] TypeScript は strict モードである
+- [x] `npm run dev` / `lint` / `typecheck` / `test` / `build` が成功する
+- [x] `src/` 配下のディレクトリが仕様の Project Structure に沿っている
+- [x] TypeScript は strict モードである
 
 **Verification:**
-- [ ] `npm install && npm run lint && npm run typecheck && npm run test && npm run build`
+- [x] `npm install && npm run lint && npm run typecheck && npm run test && npm run build`
 
 **Dependencies:** None
 
