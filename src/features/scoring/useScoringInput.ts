@@ -26,6 +26,7 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
   const lastCommitAt = useRef<number | null>(null);
   const [points, setPoints] = useState<PointInput[]>([]);
   const [sheet, setSheet] = useState<SheetState | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   function commit(outcome: PointOutcome, category: string, detail: string | null) {
     const timestamp = now();
@@ -102,10 +103,14 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
   const view = useMemo(() => deriveMatch(points), [points]);
   const recent = view.recentCurrentGame.map(formatPointLine);
 
+  const historyItems = [...view.history].reverse().map(formatPointLine);
+
   return {
     points,
     view,
     recent,
+    historyItems,
+    historyOpen,
     sheet,
     sheetItems,
     sheetStepLabel,
@@ -119,6 +124,11 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
         current?.category ? { outcome: current.outcome, category: null } : null,
       ),
     closeSheet: () => setSheet(null),
+    openHistory: () => {
+      setHistoryOpen(true);
+      setSheet(null);
+    },
+    closeHistory: () => setHistoryOpen(false),
     undo: () => {
       setPoints((current) => current.slice(0, -1));
       setSheet(null);

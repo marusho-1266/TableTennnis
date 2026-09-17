@@ -1,4 +1,5 @@
 import { CategorySheet } from "./CategorySheet";
+import { MatchReview } from "./MatchReview";
 import { ScoringScreen } from "./ScoringScreen";
 import { useScoringInput } from "./useScoringInput";
 
@@ -27,7 +28,7 @@ export function ScoringSession({ playerName, opponentName, tapGuardMs }: Scoring
       onWon={scoring.pickWon}
       onLost={scoring.pickLost}
       onUndo={scoring.undo}
-      onOpenHistory={() => undefined}
+      onOpenHistory={scoring.openHistory}
     >
       {scoring.sheet ? (
         <CategorySheet
@@ -36,6 +37,16 @@ export function ScoringSession({ playerName, opponentName, tapGuardMs }: Scoring
           items={scoring.sheetItems}
           onBack={scoring.sheetBack}
           onClose={scoring.closeSheet}
+        />
+      ) : null}
+      {scoring.historyOpen ? (
+        <MatchReview
+          gameNumber={scoring.view.current.gameNumber}
+          playerScore={scoring.view.current.playerScore}
+          opponentScore={scoring.view.current.opponentScore}
+          items={scoring.historyItems}
+          noPoints={scoring.points.length === 0}
+          onClose={scoring.closeHistory}
         />
       ) : null}
     </ScoringScreen>
