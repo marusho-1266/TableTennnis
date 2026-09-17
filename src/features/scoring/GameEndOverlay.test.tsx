@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { App } from "../../app/App";
 import { ScoringSession } from "./ScoringSession";
 import { useScoringInput } from "./useScoringInput";
+import { startMatch } from "../../../tests/helpers/startMatch";
 
 describe("game end acknowledgement", () => {
   it("shows a pending game-end after 11-0 and starts the next game at 0-0", () => {
@@ -137,6 +138,7 @@ describe("match end overlay", () => {
   it("opens the results placeholder from 試合結果を見る and never offers a new match", async () => {
     const user = userEvent.setup();
     render(<App tapGuardMs={0} />);
+    await startMatch(user);
 
     await winMatchOnScreen(user, "player");
 

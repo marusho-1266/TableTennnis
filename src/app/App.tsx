@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MatchSetupScreen } from "../features/match-setup/MatchSetupScreen";
 import { MatchSummaryScreen } from "../features/match-summary/MatchSummaryScreen";
 import { ScoringSession } from "../features/scoring/ScoringSession";
 import type { Match } from "../domain/match/types";
@@ -10,7 +11,7 @@ export interface AppProps {
 }
 
 export function App({ tapGuardMs, repository }: AppProps = {}) {
-  const [screen, setScreen] = useState<"scoring" | "summary">("scoring");
+  const [screen, setScreen] = useState<"setup" | "scoring" | "summary">("setup");
   const [ready, setReady] = useState(false);
   const [initialMatch, setInitialMatch] = useState<Match | null>(null);
   const [resolvedRepository, setResolvedRepository] = useState<MatchRepository | undefined>(
@@ -28,6 +29,9 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
       }
       setResolvedRepository(activeRepository);
       setInitialMatch(match);
+      if (match) {
+        setScreen("scoring");
+      }
       setReady(true);
     }
 
@@ -45,10 +49,29 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
     return <MatchSummaryScreen />;
   }
 
+  if (screen === "setup" || !initialMatch) {
+    return (
+      <MatchSetupScreen
+        onStart={(playerName, opponentName) => {
+          setInitialMatch({
+            id: crypto.randomUUID(),
+            playerName,
+            opponentName,
+            startedAt: new Date().toISOString(),
+            completedAt: null,
+            status: "in_progress",
+            points: [],
+          });
+          setScreen("scoring");
+        }}
+      />
+    );
+  }
+
   return (
     <ScoringSession
-      playerName={initialMatch?.playerName ?? "本田 悠真"}
-      opponentName={initialMatch?.opponentName ?? "佐々木 蓮"}
+      playerName={initialMatch.playerName}
+      opponentName={initialMatch.opponentName}
       tapGuardMs={tapGuardMs}
       initialMatch={initialMatch}
       repository={resolvedRepository}

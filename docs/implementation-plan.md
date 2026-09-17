@@ -369,12 +369,12 @@
 **Description:** 記録対象選手名と対戦相手名を必須入力し、空白除去後に第1ゲーム0-0で開始する。試合日時は端末時刻から記録する。
 
 **Acceptance criteria:**
-- [ ] 空文字では開始できない
-- [ ] 開始後に試合中画面へ入り、名前がスコアボードに出る
-- [ ] Classical の field / outlined button を使う
+- [x] 空文字では開始できない
+- [x] 開始後に試合中画面へ入り、名前がスコアボードに出る
+- [x] Classical の field / outlined button を使う
 
 **Verification:**
-- [ ] `npx vitest run src/features/match-setup`
+- [x] `npx vitest run src/features/match-setup`
 
 **Dependencies:** Task 2, Task 14
 

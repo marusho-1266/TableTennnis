@@ -419,3 +419,15 @@
   min-height: 44px;
   flex: none;
 }
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 22px;
+}
+
+.setup-form .btn {
+  margin-top: 8px;
+  min-height: 52px;
+}

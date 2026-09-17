@@ -4,6 +4,7 @@ import { App } from "../../src/app/App";
 import type { Match } from "../../src/domain/match/types";
 import { DB_NAME } from "../../src/storage/db";
 import { createMatchRepository } from "../../src/storage/matchRepository";
+import { startMatch } from "../helpers/startMatch";
 
 describe("match persistence", () => {
   afterEach(async () => {
@@ -18,6 +19,7 @@ describe("match persistence", () => {
   it("saves committed points and restores them after remount", async () => {
     const user = userEvent.setup();
     const { unmount } = render(<App tapGuardMs={0} />);
+    await startMatch(user);
 
     await user.click(await screen.findByRole("button", { name: "得点" }));
     await user.click(screen.getByRole("button", { name: /ラリー（5球目以降）/ }));
@@ -45,6 +47,7 @@ describe("match persistence", () => {
   it("keeps the restored score after undo", async () => {
     const user = userEvent.setup();
     const { unmount } = render(<App tapGuardMs={0} />);
+    await startMatch(user);
 
     await user.click(await screen.findByRole("button", { name: "得点" }));
     await user.click(screen.getByRole("button", { name: /ラリー（5球目以降）/ }));
@@ -76,6 +79,7 @@ describe("match persistence", () => {
     };
 
     render(<App tapGuardMs={0} repository={repository} />);
+    await startMatch(user);
 
     await user.click(await screen.findByRole("button", { name: "得点" }));
     await user.click(screen.getByRole("button", { name: /ラリー（5球目以降）/ }));
