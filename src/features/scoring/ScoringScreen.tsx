@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export interface PointLineView {
   head: string;
   mark: string;
@@ -20,6 +22,7 @@ export interface ScoringScreenProps {
   onLost: () => void;
   onUndo: () => void;
   onOpenHistory: () => void;
+  children?: ReactNode;
 }
 
 export function ScoringScreen({
@@ -38,6 +41,7 @@ export function ScoringScreen({
   onLost,
   onUndo,
   onOpenHistory,
+  children,
 }: ScoringScreenProps) {
   return (
     <div className="scoring-screen">
@@ -117,6 +121,7 @@ export function ScoringScreen({
           試合の確認
         </button>
       </div>
+      {children}
     </div>
   );
 }
