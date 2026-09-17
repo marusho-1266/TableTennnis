@@ -15,13 +15,13 @@ export function ScoringSession({ playerName, opponentName, tapGuardMs }: Scoring
     <ScoringScreen
       playerName={playerName}
       opponentName={opponentName}
-      gameNumber={1}
-      playerScore={0}
-      opponentScore={0}
-      gamesWonPlayer={0}
-      gamesWonOpponent={0}
-      deuce={false}
-      recent={[]}
+      gameNumber={scoring.view.current.gameNumber}
+      playerScore={scoring.view.current.playerScore}
+      opponentScore={scoring.view.current.opponentScore}
+      gamesWonPlayer={scoring.view.gamesWon.player}
+      gamesWonOpponent={scoring.view.gamesWon.opponent}
+      deuce={scoring.view.deuce}
+      recent={scoring.recent}
       noPoints={scoring.points.length === 0}
       undoDisabled={scoring.points.length === 0}
       onWon={scoring.pickWon}

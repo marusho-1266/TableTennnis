@@ -17,5 +17,7 @@ describe("ScoringSession category sheet", () => {
     expect(screen.getByText("3 / 詳細を選ぶ")).toBeTruthy();
     await user.click(screen.getByRole("button", { name: /ネット/ }));
     expect(screen.queryByRole("dialog", { name: "ポイント分類" })).toBeNull();
+    expect(screen.getByText("G1 1-0")).toBeTruthy();
+    expect(screen.getByText("得点 → ラリー（5球目以降）")).toBeTruthy();
   });
 });

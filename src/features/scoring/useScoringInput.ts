@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { findCategory, POINT_CATEGORIES } from "../../domain/match/categories";
-import type { PointInput } from "../../domain/match/derive";
+import { deriveMatch, type PointInput } from "../../domain/match/derive";
+import { formatPointLine } from "../../domain/match/format";
 import type { PointOutcome } from "../../domain/match/types";
 
 export interface SheetState {
@@ -98,8 +99,13 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
         ? "得点"
         : "失点";
 
+  const view = useMemo(() => deriveMatch(points), [points]);
+  const recent = view.recentCurrentGame.map(formatPointLine);
+
   return {
     points,
+    view,
+    recent,
     sheet,
     sheetItems,
     sheetStepLabel,
