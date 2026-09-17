@@ -18,6 +18,7 @@ export interface ScoringScreenProps {
   recent: PointLineView[];
   noPoints: boolean;
   undoDisabled: boolean;
+  inputLocked?: boolean;
   onWon: () => void;
   onLost: () => void;
   onUndo: () => void;
@@ -37,6 +38,7 @@ export function ScoringScreen({
   recent,
   noPoints,
   undoDisabled,
+  inputLocked = false,
   onWon,
   onLost,
   onUndo,
@@ -87,6 +89,7 @@ export function ScoringScreen({
           className="outcome-button outcome-won"
           data-outcome="won"
           aria-label="得点"
+          disabled={inputLocked}
           onClick={onWon}
         >
           <span className="outcome-mark" aria-hidden="true">
@@ -99,6 +102,7 @@ export function ScoringScreen({
           className="outcome-button outcome-lost"
           data-outcome="lost"
           aria-label="失点"
+          disabled={inputLocked}
           onClick={onLost}
         >
           <span className="outcome-mark" aria-hidden="true">
@@ -112,12 +116,17 @@ export function ScoringScreen({
         <button
           type="button"
           className="btn btn-secondary btn-block"
-          disabled={undoDisabled}
+          disabled={undoDisabled || inputLocked}
           onClick={onUndo}
         >
           1点戻す
         </button>
-        <button type="button" className="btn btn-secondary btn-block" onClick={onOpenHistory}>
+        <button
+          type="button"
+          className="btn btn-secondary btn-block"
+          disabled={inputLocked}
+          onClick={onOpenHistory}
+        >
           試合の確認
         </button>
       </div>

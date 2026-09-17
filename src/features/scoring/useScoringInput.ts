@@ -27,6 +27,7 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
   const [points, setPoints] = useState<PointInput[]>([]);
   const [sheet, setSheet] = useState<SheetState | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [acknowledgedGames, setAcknowledgedGames] = useState(0);
 
   function commit(outcome: PointOutcome, category: string, detail: string | null) {
     const timestamp = now();
@@ -101,9 +102,18 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
         : "失点";
 
   const view = useMemo(() => deriveMatch(points), [points]);
+  const acknowledged = Math.min(acknowledgedGames, view.games.length);
+  const showGameEnd = view.games.length > acknowledged && !view.matchOver;
   const recent = view.recentCurrentGame.map(formatPointLine);
 
   const historyItems = [...view.history].reverse().map(formatPointLine);
+
+  function pickOutcome(outcome: PointOutcome) {
+    if (showGameEnd) {
+      return;
+    }
+    setSheet({ outcome, category: null });
+  }
 
   return {
     points,
@@ -115,8 +125,9 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
     sheetItems,
     sheetStepLabel,
     sheetTrail,
-    pickWon: () => setSheet({ outcome: "won", category: null }),
-    pickLost: () => setSheet({ outcome: "lost", category: null }),
+    showGameEnd,
+    pickWon: () => pickOutcome("won"),
+    pickLost: () => pickOutcome("lost"),
     selectCategory,
     selectDetail,
     sheetBack: () =>
@@ -133,6 +144,10 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
       setPoints((current) => current.slice(0, -1));
       setSheet(null);
       lastCommitAt.current = null;
+    },
+    acknowledgeGameEnd: () => {
+      setAcknowledgedGames(view.games.length);
+      setSheet(null);
     },
   };
 }
