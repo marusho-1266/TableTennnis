@@ -19,6 +19,8 @@ export interface ScoringScreenProps {
   noPoints: boolean;
   undoDisabled: boolean;
   inputLocked?: boolean;
+  saveError?: boolean;
+  onRetrySave?: () => void;
   onWon: () => void;
   onLost: () => void;
   onUndo: () => void;
@@ -39,6 +41,8 @@ export function ScoringScreen({
   noPoints,
   undoDisabled,
   inputLocked = false,
+  saveError = false,
+  onRetrySave,
   onWon,
   onLost,
   onUndo,
@@ -53,6 +57,14 @@ export function ScoringScreen({
           ゲーム {gamesWonPlayer}–{gamesWonOpponent}
         </p>
       </header>
+      {saveError ? (
+        <div className="save-banner" role="alert">
+          <span>保存に失敗しました。</span>
+          <button type="button" className="btn btn-secondary" onClick={onRetrySave}>
+            再試行
+          </button>
+        </div>
+      ) : null}
 
       <section className="scoreboard" aria-label="現在のスコア">
         <div className="scoreboard-side">

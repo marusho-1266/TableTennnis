@@ -347,13 +347,13 @@
 **Description:** ポイント確定とUndoのたびに進行中試合を保存し、起動時に復元する。保存失敗時は成功扱いしない。
 
 **Acceptance criteria:**
-- [ ] 確定／Undo後に IndexedDB 上のポイント列が画面と一致する
-- [ ] 再読み込み後に進行中試合を続けられる
-- [ ] 保存失敗時に再試行可能な通知が出る
+- [x] 確定／Undo後に IndexedDB 上のポイント列が画面と一致する
+- [x] 再読み込み後に進行中試合を続けられる
+- [x] 保存失敗時に再試行可能な通知が出る
 
 **Verification:**
-- [ ] `npx vitest run tests/integration`
-- [ ] Manual check: 数点記録 → 再読み込み → 同じスコアで再開
+- [x] `npx vitest run tests/integration`
+- [x] Manual check: 数点記録 → 再読み込み → 同じスコアで再開
 
 **Dependencies:** Task 12, Task 13
 

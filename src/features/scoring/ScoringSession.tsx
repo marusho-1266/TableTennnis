@@ -1,13 +1,18 @@
+import type { Match } from "../../domain/match/types";
+import type { MatchRepository } from "../../storage/matchRepository";
 import { CategorySheet } from "./CategorySheet";
 import { GameEndOverlay } from "./GameEndOverlay";
 import { MatchReview } from "./MatchReview";
 import { ScoringScreen } from "./ScoringScreen";
+import { useMatchPersistence } from "./useMatchPersistence";
 import { useScoringInput } from "./useScoringInput";
 
 export interface ScoringSessionProps {
   playerName: string;
   opponentName: string;
   tapGuardMs?: number;
+  initialMatch?: Match | null;
+  repository?: MatchRepository;
   onViewResults?: () => void;
 }
 
@@ -15,9 +20,23 @@ export function ScoringSession({
   playerName,
   opponentName,
   tapGuardMs,
+  initialMatch,
+  repository,
   onViewResults,
 }: ScoringSessionProps) {
-  const scoring = useScoringInput({ tapGuardMs });
+  const scoring = useScoringInput({
+    tapGuardMs,
+    initialPoints: initialMatch?.points,
+  });
+  const persistence = useMatchPersistence({
+    playerName,
+    opponentName,
+    initialMatch,
+    points: scoring.points,
+    history: scoring.view.history,
+    matchOver: scoring.view.matchOver,
+    repository,
+  });
   const lastCompletedGame = scoring.view.games.at(-1);
   const overlay = lastCompletedGame
     ? scoring.showMatchEnd
@@ -55,6 +74,8 @@ export function ScoringSession({
       noPoints={scoring.points.length === 0}
       undoDisabled={scoring.points.length === 0}
       inputLocked={scoring.showGameEnd || scoring.showMatchEnd}
+      saveError={persistence.saveError}
+      onRetrySave={persistence.retrySave}
       onWon={scoring.pickWon}
       onLost={scoring.pickLost}
       onUndo={scoring.undo}

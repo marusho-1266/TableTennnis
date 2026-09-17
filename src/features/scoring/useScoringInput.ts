@@ -18,16 +18,19 @@ export interface SheetItem {
 export interface UseScoringInputOptions {
   tapGuardMs?: number;
   now?: () => number;
+  initialPoints?: PointInput[];
 }
 
 export function useScoringInput(options: UseScoringInputOptions = {}) {
   const tapGuardMs = options.tapGuardMs ?? 250;
   const now = options.now ?? Date.now;
   const lastCommitAt = useRef<number | null>(null);
-  const [points, setPoints] = useState<PointInput[]>([]);
+  const [points, setPoints] = useState<PointInput[]>(() => options.initialPoints ?? []);
   const [sheet, setSheet] = useState<SheetState | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [acknowledgedGames, setAcknowledgedGames] = useState(0);
+  const [acknowledgedGames, setAcknowledgedGames] = useState(() =>
+    acknowledgedFrom(options.initialPoints ?? []),
+  );
 
   function commit(outcome: PointOutcome, category: string, detail: string | null) {
     const timestamp = now();
@@ -43,6 +46,7 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
         outcome,
         category,
         detail,
+        recordedAt: new Date(timestamp).toISOString(),
       },
     ]);
     setSheet(null);
@@ -152,4 +156,12 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
       setSheet(null);
     },
   };
+}
+
+function acknowledgedFrom(points: PointInput[]) {
+  const view = deriveMatch(points);
+  if (view.current.points.length === 0 && view.games.length > 0 && !view.matchOver) {
+    return view.games.length - 1;
+  }
+  return view.games.length;
 }

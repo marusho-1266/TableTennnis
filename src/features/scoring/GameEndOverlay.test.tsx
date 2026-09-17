@@ -193,7 +193,7 @@ async function winGameOnScreen(
   const category = winner === "player" ? /ラリー（5球目以降）/ : /^ラリー/;
 
   for (let index = 0; index < 11; index += 1) {
-    await user.click(screen.getByRole("button", { name: outcome }));
+    await user.click(await screen.findByRole("button", { name: outcome }));
     await user.click(screen.getByRole("button", { name: category }));
   }
 }

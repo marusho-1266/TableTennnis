@@ -3,7 +3,13 @@ import { MATCH_STORE, SCHEMA_VERSION, openMatchDb } from "./db";
 
 export { SCHEMA_VERSION };
 
-export async function createMatchRepository() {
+export interface MatchRepository {
+  save(match: Match): Promise<void>;
+  getById(id: string): Promise<Match | null>;
+  getInProgress(): Promise<Match | null>;
+}
+
+export async function createMatchRepository(): Promise<MatchRepository> {
   return {
     async save(match: Match) {
       const database = await openMatchDb();
@@ -18,6 +24,20 @@ export async function createMatchRepository() {
       try {
         const record = await database.get(MATCH_STORE, id);
         return isMatch(record) ? record : null;
+      } finally {
+        database.close();
+      }
+    },
+    async getInProgress(): Promise<Match | null> {
+      const database = await openMatchDb();
+      try {
+        const records = await database.getAll(MATCH_STORE);
+        return (
+          records
+            .filter(isMatch)
+            .filter((match) => match.status === "in_progress")
+            .sort((left, right) => right.startedAt.localeCompare(left.startedAt))[0] ?? null
+        );
       } finally {
         database.close();
       }

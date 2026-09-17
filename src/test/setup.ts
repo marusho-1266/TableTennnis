@@ -1,1 +1,1 @@
-// Shared Vitest setup. Keep side-effect imports here.
+import "fake-indexeddb/auto";

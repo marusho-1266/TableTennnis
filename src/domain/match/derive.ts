@@ -6,6 +6,7 @@ export interface PointInput {
   outcome: PointOutcome;
   category: string;
   detail: string | null;
+  recordedAt?: string;
 }
 
 export interface DerivedPoint extends PointInput {
