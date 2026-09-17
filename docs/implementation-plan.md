@@ -326,12 +326,12 @@
 **Description:** 試合の保存・取得・一覧用リポジトリとスキーマバージョンを実装する。UIからはリポジトリ経由のみとする。
 
 **Acceptance criteria:**
-- [ ] Match を ID で保存・取得できる
-- [ ] スキーマにバージョン番号がある
-- [ ] 読み出しデータを検証し、不正データは受け入れない
+- [x] Match を ID で保存・取得できる
+- [x] スキーマにバージョン番号がある
+- [x] 読み出しデータを検証し、不正データは受け入れない
 
 **Verification:**
-- [ ] `npx vitest run src/storage`
+- [x] `npx vitest run src/storage`
 
 **Dependencies:** Task 5
 
