@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/classical-4d4e7bf4-568b-4b7a-8257-a0701745b5f3/styles.css">
+<script src="_ds/classical-4d4e7bf4-568b-4b7a-8257-a0701745b5f3/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--color-neutral-200); }
+  a { color: var(--color-accent-700); text-decoration: none; }
+  a:hover { color: var(--color-accent); }
+  @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 28px; font-family: var(--font-body);">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="position: relative; height: 100%; display: flex; flex-direction: column; background: var(--color-bg); padding: 56px 20px 40px; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid var(--color-divider);">
+    <div style="font-family: var(--font-heading); font-size: 21px; font-weight: 600; letter-spacing: -0.01em;">第{{ gameNo }}ゲーム</div>
+    <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent-700); font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum';">ゲーム {{ gamesWonPlayer }}–{{ gamesWonOpponent }}</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1px 1fr; align-items: stretch; padding: 22px 0 18px;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <div style="font-size: 13px; line-height: 1.3; text-align: center; max-width: 140px;">{{ playerLabel }}</div>
+      <div style="font-family: var(--font-heading); font-weight: 400; font-size: 88px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum';">{{ playerScore }}</div>
+      <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);">記録対象</div>
+    </div>
+    <div style="background: var(--color-divider);"></div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <div style="font-size: 13px; line-height: 1.3; text-align: center; max-width: 140px;">{{ opponentLabel }}</div>
+      <div style="font-family: var(--font-heading); font-weight: 400; font-size: 88px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum'; color: var(--color-neutral-800);">{{ opponentScore }}</div>
+      <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);">対戦相手</div>
+    </div>
+  </div>
+
+  <sc-if value="{{ deuceNotice }}" hint-placeholder-val="{{ false }}">
+    <div style="align-self: center; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700); border: 1px solid var(--color-accent); border-radius: var(--radius-md); padding: 3px 12px; margin-bottom: 14px;">2点差まで継続</div>
+  </sc-if>
+
+  <sc-if value="{{ showRecent }}" hint-placeholder-val="{{ true }}">
+    <div style="border-top: 1px solid var(--color-divider); padding-top: 10px; display: flex; flex-direction: column; gap: 7px;">
+      <sc-for list="{{ recent }}" as="r" hint-placeholder-count="3">
+        <div style="display: flex; align-items: baseline; gap: 10px; font-size: 12.5px; color: var(--color-neutral-800);">
+          <span style="font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum'; color: var(--color-neutral-600); flex: none;">{{ r.head }}</span>
+          <span style="flex: none; font-family: var(--font-heading); font-size: 13px;">{{ r.mark }}</span>
+          <span style="text-wrap: pretty;">{{ r.body }}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{ noPoints }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size: 12.5px; color: var(--color-neutral-600);">まだ記録がありません。</div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <div style="flex: 1;"></div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <button type="button" onClick="{{ pickWon }}" style="min-height: 104px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: transparent; border: 1.5px solid var(--color-accent); border-radius: var(--radius-md); color: var(--color-accent-700); font-family: var(--font-heading); font-weight: 600;" style-hover="background: color-mix(in srgb, var(--color-accent) 12%, transparent);" style-active="background: color-mix(in srgb, var(--color-accent) 22%, transparent);">
+      <span style="font-size: 30px; line-height: 1; font-weight: 400;">＋</span>
+      <span style="font-size: 22px; letter-spacing: 0.04em;">得点</span>
+    </button>
+    <button type="button" onClick="{{ pickLost }}" style="min-height: 104px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: transparent; border: 1.5px dashed var(--color-neutral-700); border-radius: var(--radius-md); color: var(--color-neutral-900); font-family: var(--font-heading); font-weight: 600;" style-hover="background: color-mix(in srgb, #201f1d 7%, transparent);" style-active="background: color-mix(in srgb, #201f1d 14%, transparent);">
+      <span style="font-size: 30px; line-height: 1; font-weight: 400;">−</span>
+      <span style="font-size: 22px; letter-spacing: 0.04em;">失点</span>
+    </button>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+    <button type="button" onClick="{{ undo }}" disabled="{{ undoDisabled }}" style="min-height: 48px; cursor: pointer; background: transparent; border: 1px solid var(--color-divider); border-radius: var(--radius-md); font-family: var(--font-heading); font-weight: 600; font-size: 15px; color: var(--color-text);" style-hover="background: color-mix(in srgb, #201f1d 7%, transparent);">1点戻す</button>
+    <button type="button" onClick="{{ openHistory }}" style="min-height: 48px; cursor: pointer; background: transparent; border: 1px solid var(--color-divider); border-radius: var(--radius-md); font-family: var(--font-heading); font-weight: 600; font-size: 15px; color: var(--color-text);" style-hover="background: color-mix(in srgb, #201f1d 7%, transparent);">試合の確認</button>
+  </div>
+
+  <sc-if value="{{ showSheet }}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; z-index: 30;">
+      <div onClick="{{ closeSheet }}" style="position: absolute; inset: 0; background: color-mix(in srgb, #2d2b2b 42%, transparent); animation: fadeIn .16s ease;"></div>
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; background: var(--color-bg); border-top: 1px solid var(--color-divider); border-radius: var(--radius-lg) var(--radius-lg) 0 0; box-shadow: var(--shadow-lg); padding: 14px 20px 38px; animation: sheetUp .22s cubic-bezier(.22,.8,.3,1);">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+          <div style="width: 46px; height: 3px; border-radius: 100px; background: var(--color-neutral-400);"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--color-divider);">
+          <button type="button" onClick="{{ sheetBack }}" style="min-width: 44px; min-height: 44px; cursor: pointer; background: transparent; border: 1px solid var(--color-divider); border-radius: var(--radius-md); font-family: var(--font-heading); font-size: 15px; color: var(--color-text);" style-hover="background: color-mix(in srgb, #201f1d 7%, transparent);">戻る</button>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-neutral-600);">{{ sheetStepLabel }}</div>
+            <div style="font-family: var(--font-heading); font-weight: 600; font-size: 19px;">{{ sheetTrail }}</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; margin-top: 4px; max-height: 372px; overflow-y: auto;">
+          <sc-for list="{{ sheetItems }}" as="it" hint-placeholder-count="5">
+            <button type="button" onClick="{{ it.onClick }}" style="min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; cursor: pointer; background: transparent; border: 0; border-bottom: 1px solid var(--color-divider); padding: 8px 2px; font-family: var(--font-body); font-size: 17px; color: var(--color-text);" style-hover="background: color-mix(in srgb, var(--color-accent) 10%, transparent);" style-active="background: color-mix(in srgb, var(--color-accent) 18%, transparent);">
+              <span>{{ it.label }}</span>
+              <span style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent-700); flex: none;">{{ it.hint }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showHistory }}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; z-index: 40; background: var(--color-bg); display: flex; flex-direction: column; padding: 56px 20px 40px; animation: fadeIn .16s ease;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid var(--color-divider);">
+        <div style="font-family: var(--font-heading); font-size: 21px; font-weight: 600;">試合の確認</div>
+        <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent-700); font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum';">第{{ gameNo }}ゲーム {{ playerScore }}–{{ opponentScore }}</div>
+      </div>
+      <div style="font-size: 11px; color: var(--color-neutral-600); padding: 8px 0 4px;">新しい順・読み取り専用</div>
+      <div style="flex: 1; overflow-y: auto; margin-bottom: 14px;">
+        <sc-for list="{{ historyItems }}" as="h" hint-placeholder-count="6">
+          <div style="display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--color-divider); font-size: 13.5px;">
+            <span style="font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum'; color: var(--color-neutral-600); flex: none; width: 66px;">{{ h.head }}</span>
+            <span style="flex: none; font-family: var(--font-heading); font-size: 14px;">{{ h.mark }}</span>
+            <span style="text-wrap: pretty;">{{ h.body }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noPoints }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size: 13px; color: var(--color-neutral-600); padding-top: 10px;">記録されたポイントはまだありません。</div>
+        </sc-if>
+      </div>
+      <button type="button" onClick="{{ closeHistory }}" style="min-height: 52px; cursor: pointer; background: transparent; border: 1px solid var(--color-accent); border-radius: var(--radius-md); font-family: var(--font-heading); font-weight: 600; font-size: 16px; color: var(--color-accent-700);" style-hover="background: color-mix(in srgb, var(--color-accent) 12%, transparent);">閉じて試合へ戻る</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showGameEnd }}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; z-index: 50; display: grid; place-items: center; padding: 20px; background: color-mix(in srgb, #2d2b2b 50%, transparent); animation: fadeIn .18s ease;">
+      <div style="width: 100%; display: flex; flex-direction: column; gap: 14px; padding: 22px; border-radius: var(--radius-lg); background: var(--color-surface); border: 1px solid var(--color-divider); box-shadow: var(--shadow-lg);">
+        <div style="font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">{{ endKicker }}</div>
+        <div style="font-family: var(--font-heading); font-weight: 400; font-size: 34px; line-height: 1.1;">{{ endTitle }}</div>
+        <div style="font-family: var(--font-heading); font-size: 46px; font-weight: 400; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum'; letter-spacing: 0.02em;">{{ endScore }}</div>
+        <div style="font-size: 13.5px; color: var(--color-neutral-800);">{{ endNote }}</div>
+        <div style="display: flex; flex-direction: column; gap: 4px; border-top: 1px solid var(--color-divider); padding-top: 10px;">
+          <sc-for list="{{ gameLines }}" as="g" hint-placeholder-count="2">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: 'lnum','tnum';">
+              <span style="color: var(--color-neutral-700);">{{ g.label }}</span>
+              <span>{{ g.score }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
+          <button type="button" onClick="{{ endPrimary }}" style="min-height: 52px; cursor: pointer; background: transparent; border: 1px solid var(--color-accent); border-radius: var(--radius-md); font-family: var(--font-heading); font-weight: 600; font-size: 16px; color: var(--color-accent-700);" style-hover="background: color-mix(in srgb, var(--color-accent) 12%, transparent);">{{ endPrimaryLabel }}</button>
+          <button type="button" onClick="{{ undo }}" style="min-height: 48px; cursor: pointer; background: transparent; border: 1px solid var(--color-divider); border-radius: var(--radius-md); font-family: var(--font-heading); font-weight: 600; font-size: 15px; color: var(--color-text);" style-hover="background: color-mix(in srgb, #201f1d 7%, transparent);">1点戻す</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:940},&quot;playerName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;本田 悠真&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;opponentName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;佐々木 蓮&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showRecent&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;記録画面&quot;},&quot;tapGuardMs&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:250,&quot;min&quot;:0,&quot;max&quot;:800,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;記録画面&quot;}}">
+const WON = [
+  { category: "サーブ", details: ["エース", "相手レシーブミス"] },
+  { category: "3球目", details: ["フォアドライブ", "フォアドライブ回り込み", "バックハンド", "スマッシュ", "その他"] },
+  { category: "ラリー（5球目以降）", details: null },
+  { category: "レシーブ", details: ["フォアドライブ", "バックハンド", "相手ミス", "その他"] },
+  { category: "相手ミス", details: ["サーブミス", "レシーブミス", "攻撃ミス", "その他"] },
+];
+const LOST = [
+  { category: "サーブミス", details: ["ネット", "オーバー", "空振り", "その他"] },
+  { category: "レシーブミス", details: ["ネット", "オーバー", "空振り", "その他"] },
+  { category: "3球目ミス", details: ["フォアドライブネット", "フォアドライブオーバー", "バックハンドミス", "空振り", "その他"] },
+  { category: "ラリー", details: null },
+  { category: "相手決定打", details: ["レシーブ浮いた", "その他"] },
+];
+
+function isGameComplete(p, o) {
+  return Math.max(p, o) >= 11 && Math.abs(p - o) >= 2;
+}
+
+class Component extends DCLogic {
+  state = { points: [], sheet: null, history: false, ack: 0, lastAt: 0 };
+
+  derive() {
+    const games = [];
+    let p = 0, o = 0, gw = 0, ow = 0, num = 1, rows = [];
+    const flat = [];
+    this.state.points.forEach((pt, i) => {
+      if (pt.outcome === "won") p += 1; else o += 1;
+      const row = { ...pt, seq: i + 1, gameNumber: num, p, o };
+      rows.push(row);
+      flat.push(row);
+      if (isGameComplete(p, o)) {
+        const winner = p > o ? "player" : "opponent";
+        if (winner === "player") gw += 1; else ow += 1;
+        games.push({ num, p, o, winner, points: rows });
+        num += 1; p = 0; o = 0; rows = [];
+      }
+    });
+    const matchOver = gw === 3 || ow === 3;
+    return { games, cur: { num, p, o, points: rows }, gw, ow, matchOver, flat };
+  }
+
+  line(r) {
+    const mark = r.outcome === "won" ? "＋" : "−";
+    const body = [r.outcome === "won" ? "得点" : "失点", r.category, r.detail].filter(Boolean).join(" → ");
+    return { head: "G" + r.gameNumber + " " + r.p + "-" + r.o, mark, body };
+  }
+
+  commit(outcome, category, detail) {
+    const now = Date.now();
+    if (now - this.state.lastAt < (this.props.tapGuardMs ?? 250)) return;
+    this.setState((s) => ({
+      points: [...s.points, { id: String(now) + Math.random(), outcome, category, detail }],
+      sheet: null,
+      lastAt: now,
+    }));
+  }
+
+  undo = () => {
+    this.setState((s) => {
+      const points = s.points.slice(0, -1);
+      let p = 0, o = 0, done = 0;
+      points.forEach((pt) => {
+        if (pt.outcome === "won") p += 1; else o += 1;
+        if (isGameComplete(p, o)) { done += 1; p = 0; o = 0; }
+      });
+      return { points, sheet: null, lastAt: 0, ack: Math.min(s.ack, done) };
+    });
+  };
+
+  renderVals() {
+    const d = this.derive();
+    const s = this.state;
+    const completed = d.games.length;
+    const pendingGameEnd = completed > s.ack && !d.matchOver;
+    const showGameEnd = pendingGameEnd || d.matchOver;
+    const last = d.games[completed - 1];
+    const playerLabel = this.props.playerName ?? "本田 悠真";
+    const opponentLabel = this.props.opponentName ?? "佐々木 蓮";
+
+    let sheetItems = [], sheetTrail = "", sheetStepLabel = "";
+    if (s.sheet) {
+      const bank = s.sheet.outcome === "won" ? WON : LOST;
+      const head = s.sheet.outcome === "won" ? "得点" : "失点";
+      if (!s.sheet.category) {
+        sheetStepLabel = "2 / 大分類を選ぶ";
+        sheetTrail = head;
+        sheetItems = bank.map((c) => ({
+          label: c.category,
+          hint: c.details ? "" : "確定",
+          onClick: c.details
+            ? () => this.setState({ sheet: { outcome: s.sheet.outcome, category: c.category } })
+            : () => this.commit(s.sheet.outcome, c.category, null),
+        }));
+      } else {
+        const c = bank.find((x) => x.category === s.sheet.category);
+        sheetStepLabel = "3 / 詳細を選ぶ";
+        sheetTrail = head + " → " + c.category;
+        sheetItems = c.details.map((dt) => ({
+          label: dt, hint: "確定",
+          onClick: () => this.commit(s.sheet.outcome, c.category, dt),
+        }));
+      }
+    }
+
+    const recentAll = d.cur.points.slice(-3).reverse().map((r) => this.line(r));
+    const gameLines = d.games.map((g) => ({
+      label: "第" + g.num + "ゲーム",
+      score: g.p + " – " + g.o + (g.winner === "player" ? "　◦ 獲得" : ""),
+    }));
+
+    let endKicker = "", endTitle = "", endScore = "", endNote = "", endPrimaryLabel = "", endPrimary = () => {};
+    if (d.matchOver) {
+      const win = d.gw === 3;
+      endKicker = "試合終了";
+      endTitle = win ? "勝利" : "敗戦";
+      endScore = d.gw + " – " + d.ow;
+      endNote = playerLabel + " 対 " + opponentLabel + "　ゲーム取得数 " + d.gw + "–" + d.ow;
+      endPrimaryLabel = "新しい試合を始める";
+      endPrimary = () => this.setState({ points: [], sheet: null, ack: 0, history: false, lastAt: 0 });
+    } else if (last) {
+      endKicker = "第" + last.num + "ゲーム終了";
+      endTitle = (last.winner === "player" ? playerLabel : opponentLabel) + " のゲーム";
+      endScore = last.p + " – " + last.o;
+      endNote = "ゲーム取得数 " + d.gw + "–" + d.ow + "。3ゲーム先取で試合終了。";
+      endPrimaryLabel = "次のゲームへ";
+      endPrimary = () => this.setState({ ack: completed });
+    }
+
+    return {
+      playerLabel, opponentLabel,
+      gameNo: d.cur.num, playerScore: d.cur.p, opponentScore: d.cur.o,
+      gamesWonPlayer: d.gw, gamesWonOpponent: d.ow,
+      deuceNotice: d.cur.p >= 10 && d.cur.o >= 10,
+      showRecent: (this.props.showRecent ?? true) && !showGameEnd,
+      recent: recentAll,
+      noPoints: s.points.length === 0,
+      undoDisabled: s.points.length === 0,
+      undo: this.undo,
+      pickWon: () => this.setState({ sheet: { outcome: "won", category: null } }),
+      pickLost: () => this.setState({ sheet: { outcome: "lost", category: null } }),
+      showSheet: !!s.sheet && !showGameEnd,
+      sheetItems, sheetTrail, sheetStepLabel,
+      closeSheet: () => this.setState({ sheet: null }),
+      sheetBack: () => this.setState((st) => ({
+        sheet: st.sheet && st.sheet.category ? { outcome: st.sheet.outcome, category: null } : null,
+      })),
+      openHistory: () => this.setState({ history: true, sheet: null }),
+      closeHistory: () => this.setState({ history: false }),
+      showHistory: s.history,
+      historyItems: d.flat.slice().reverse().map((r) => this.line(r)),
+      showGameEnd, endKicker, endTitle, endScore, endNote, endPrimaryLabel, endPrimary,
+      gameLines,
+    };
+  }
+}
+</script>
+</body>
+</html>
