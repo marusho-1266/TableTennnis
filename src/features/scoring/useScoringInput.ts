@@ -119,5 +119,10 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
         current?.category ? { outcome: current.outcome, category: null } : null,
       ),
     closeSheet: () => setSheet(null),
+    undo: () => {
+      setPoints((current) => current.slice(0, -1));
+      setSheet(null);
+      lastCommitAt.current = null;
+    },
   };
 }

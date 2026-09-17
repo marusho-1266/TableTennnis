@@ -53,6 +53,27 @@ describe("useScoringInput", () => {
     expect(result.current.points).toEqual([]);
   });
 
+  it("undoes the latest point repeatedly", () => {
+    const now = sequence([0, 300, 600]);
+    const { result } = renderHook(() => useScoringInput({ now }));
+
+    act(() => result.current.pickWon());
+    act(() => result.current.selectCategory("ラリー（5球目以降）"));
+    act(() => result.current.pickLost());
+    act(() => result.current.selectCategory("ラリー"));
+    expect(result.current.points).toHaveLength(2);
+
+    act(() => result.current.undo());
+    expect(result.current.points).toHaveLength(1);
+    expect(result.current.view.current.playerScore).toBe(1);
+    expect(result.current.view.current.opponentScore).toBe(0);
+
+    act(() => result.current.undo());
+    expect(result.current.points).toHaveLength(0);
+    act(() => result.current.undo());
+    expect(result.current.points).toHaveLength(0);
+  });
+
   it("ignores a second commit within the tap-guard window", () => {
     const now = sequence([1000, 1100, 2000]);
     const { result } = renderHook(() => useScoringInput({ tapGuardMs: 250, now }));

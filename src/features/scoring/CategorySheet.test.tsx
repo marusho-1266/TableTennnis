@@ -19,5 +19,9 @@ describe("ScoringSession category sheet", () => {
     expect(screen.queryByRole("dialog", { name: "ポイント分類" })).toBeNull();
     expect(screen.getByText("G1 1-0")).toBeTruthy();
     expect(screen.getByText("得点 → ラリー（5球目以降）")).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "1点戻す" }));
+    await user.click(screen.getByRole("button", { name: "1点戻す" }));
+    expect(screen.getByText("まだ記録がありません。")).toBeTruthy();
   });
 });

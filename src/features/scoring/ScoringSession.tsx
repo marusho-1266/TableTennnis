@@ -26,7 +26,7 @@ export function ScoringSession({ playerName, opponentName, tapGuardMs }: Scoring
       undoDisabled={scoring.points.length === 0}
       onWon={scoring.pickWon}
       onLost={scoring.pickLost}
-      onUndo={() => undefined}
+      onUndo={scoring.undo}
       onOpenHistory={() => undefined}
     >
       {scoring.sheet ? (
