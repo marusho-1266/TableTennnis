@@ -420,12 +420,12 @@
 **Description:** ポイント列からゲーム別の大分類件数と、試合全体の件数・構成比を計算する。0件は0、分母0は0%とする。
 
 **Acceptance criteria:**
-- [ ] 得点5分類・失点5分類がゲームごと・試合全体で出る
-- [ ] 0件分類も0で残る
-- [ ] ポイント0件の構成比は0%である
+- [x] 得点5分類・失点5分類がゲームごと・試合全体で出る
+- [x] 0件分類も0で残る
+- [x] ポイント0件の構成比は0%である
 
 **Verification:**
-- [ ] `npx vitest run src/domain/match/stats.test.ts`
+- [x] `npx vitest run src/domain/match/stats.test.ts`
 
 **Dependencies:** Task 5
 
