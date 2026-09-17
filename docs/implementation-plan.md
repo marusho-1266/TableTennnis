@@ -90,12 +90,12 @@
 **Description:** 得点／失点の大分類・詳細、確定タップ数、Match / Point 型をコードの正本にする。
 
 **Acceptance criteria:**
-- [ ] 仕様 3.3 / 3.4 の全分類が定義されている
-- [ ] 詳細なしは2タップ、それ以外は3タップと判定できる
-- [ ] 画面へ分類文字列を直書きしない
+- [x] 仕様 3.3 / 3.4 の全分類が定義されている
+- [x] 詳細なしは2タップ、それ以外は3タップと判定できる
+- [x] 画面へ分類文字列を直書きしない
 
 **Verification:**
-- [ ] `npx vitest run src/domain/match`
+- [x] `npx vitest run src/domain/match`
 
 **Dependencies:** Task 1
 
