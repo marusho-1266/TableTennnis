@@ -56,4 +56,26 @@ describe("matchRepository", () => {
     expect(await repository.getById("bad")).toBeNull();
     expect(await repository.getById("missing")).toBeNull();
   });
+
+  it("lists completed matches newest first and omits in-progress ones", async () => {
+    const repository = await createMatchRepository();
+    await repository.save(sampleMatch);
+    await repository.save({
+      ...sampleMatch,
+      id: "older",
+      status: "completed",
+      startedAt: "2026-09-16T13:00:00.000Z",
+      completedAt: "2026-09-16T14:00:00.000Z",
+    });
+    await repository.save({
+      ...sampleMatch,
+      id: "newer",
+      status: "completed",
+      startedAt: "2026-09-17T15:00:00.000Z",
+      completedAt: "2026-09-17T16:00:00.000Z",
+    });
+
+    const listed = await repository.listCompleted();
+    expect(listed.map((match) => match.id)).toEqual(["newer", "older"]);
+  });
 });

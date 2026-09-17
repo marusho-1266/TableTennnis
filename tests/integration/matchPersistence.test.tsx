@@ -78,6 +78,7 @@ describe("match persistence", () => {
       },
       getById: async () => null,
       getInProgress: async () => null,
+      listCompleted: async () => [],
     };
 
     render(<App tapGuardMs={0} repository={repository} />);

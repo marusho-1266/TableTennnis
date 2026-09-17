@@ -7,6 +7,7 @@ export interface MatchRepository {
   save(match: Match): Promise<void>;
   getById(id: string): Promise<Match | null>;
   getInProgress(): Promise<Match | null>;
+  listCompleted(): Promise<Match[]>;
 }
 
 export async function createMatchRepository(): Promise<MatchRepository> {
@@ -38,6 +39,18 @@ export async function createMatchRepository(): Promise<MatchRepository> {
             .filter((match) => match.status === "in_progress")
             .sort((left, right) => right.startedAt.localeCompare(left.startedAt))[0] ?? null
         );
+      } finally {
+        database.close();
+      }
+    },
+    async listCompleted(): Promise<Match[]> {
+      const database = await openMatchDb();
+      try {
+        const records = await database.getAll(MATCH_STORE);
+        return records
+          .filter(isMatch)
+          .filter((match) => match.status === "completed")
+          .sort((left, right) => right.startedAt.localeCompare(left.startedAt));
       } finally {
         database.close();
       }

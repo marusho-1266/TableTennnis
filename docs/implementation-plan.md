@@ -463,14 +463,14 @@
 **Description:** 完了試合を新しい順で一覧し、選択すると結果画面と同じ詳細を再表示する。
 
 **Acceptance criteria:**
-- [ ] 一覧に日時、選手名、相手名、勝敗、ゲーム取得数が出る
-- [ ] 初期順は日時の新しい順である
-- [ ] 詳細は試合終了直後と同じ内容である
-- [ ] 進行中試合は完了一覧に混ぜない
+- [x] 一覧に日時、選手名、相手名、勝敗、ゲーム取得数が出る
+- [x] 初期順は日時の新しい順である
+- [x] 詳細は試合終了直後と同じ内容である
+- [x] 進行中試合は完了一覧に混ぜない
 
 **Verification:**
-- [ ] `npx vitest run src/features/match-history`
-- [ ] Manual check: 完了試合を開き、一覧へ戻れる
+- [x] `npx vitest run src/features/match-history`
+- [x] Manual check: 完了試合を開き、一覧へ戻れる
 
 **Dependencies:** Task 16, Task 18
 
@@ -483,8 +483,8 @@
 
 ### Checkpoint: Summary and History
 
-- [ ] 完了試合が保存され、一覧と詳細で再閲覧できる
-- [ ] 集計が記録と一致する
+- [x] 完了試合が保存され、一覧と詳細で再閲覧できる
+- [x] 集計が記録と一致する
 - [ ] レビュー後に Phase 5 へ進む
 
 ### Phase 5: Polish

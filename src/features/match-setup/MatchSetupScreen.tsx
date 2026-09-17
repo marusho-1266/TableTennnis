@@ -4,13 +4,19 @@ import { ResumeMatchBanner } from "./ResumeMatchBanner";
 export interface MatchSetupScreenProps {
   onStart: (playerName: string, opponentName: string) => void;
   onResume?: () => void;
+  onOpenHistory?: () => void;
   inProgressMatch?: {
     playerName: string;
     opponentName: string;
   } | null;
 }
 
-export function MatchSetupScreen({ onStart, onResume, inProgressMatch }: MatchSetupScreenProps) {
+export function MatchSetupScreen({
+  onStart,
+  onResume,
+  onOpenHistory,
+  inProgressMatch,
+}: MatchSetupScreenProps) {
   const [playerName, setPlayerName] = useState("");
   const [opponentName, setOpponentName] = useState("");
   const [confirming, setConfirming] = useState(false);
@@ -67,6 +73,11 @@ export function MatchSetupScreen({ onStart, onResume, inProgressMatch }: MatchSe
           試合開始
         </button>
       </form>
+      {onOpenHistory ? (
+        <button type="button" className="btn btn-secondary btn-block" onClick={onOpenHistory}>
+          過去の試合
+        </button>
+      ) : null}
       {confirming ? (
         <div className="dialog-backdrop">
           <div className="dialog" role="dialog" aria-modal="true" aria-label="新しい試合の確認">
