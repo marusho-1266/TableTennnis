@@ -537,14 +537,14 @@
 **Description:** Playwright のモバイルビューポートで、試合開始から結果保存、デュース、ゲーム跨ぎUndo、オフライン閲覧を自動確認する。
 
 **Acceptance criteria:**
-- [ ] 試合開始 → 3ゲーム先取 → 結果保存が通る
-- [ ] 10-10からデュース終了が通る
-- [ ] ゲーム終了をまたぐ連続Undoが通る
-- [ ] オフラインで記録と履歴閲覧ができる
+- [x] 試合開始 → 3ゲーム先取 → 結果保存が通る
+- [x] 10-10からデュース終了が通る
+- [x] ゲーム終了をまたぐ連続Undoが通る
+- [x] オフラインで記録と履歴閲覧ができる
 
 **Verification:**
-- [ ] `npm run test:e2e`
-- [ ] `npm run lint && npm run typecheck && npm run test && npm run build`
+- [x] `npm run test:e2e`
+- [x] `npm run lint && npm run typecheck && npm run test && npm run build`
 
 **Dependencies:** Task 21
 
@@ -558,10 +558,10 @@
 
 ### Checkpoint: Complete
 
-- [ ] 仕様 12. Success Criteria をすべて満たす
-- [ ] 試合中UIが `design/Match Scoring.dc.html` を基準に再現されている
-- [ ] `lint` / `typecheck` / `test` / `build` / 主要E2Eが成功する
-- [ ] 自動分析・練習提案がコード上に存在しない
+- [x] 仕様 12. Success Criteria をすべて満たす
+- [x] 試合中UIが `design/Match Scoring.dc.html` を基準に再現されている
+- [x] `lint` / `typecheck` / `test` / `build` / 主要E2Eが成功する
+- [x] 自動分析・練習提案がコード上に存在しない
 - [ ] レビュー後に完了とする
 
 ## Parallelization
