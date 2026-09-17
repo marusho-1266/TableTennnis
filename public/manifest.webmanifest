@@ -1,0 +1,18 @@
+{
+  "name": "卓球試合記録",
+  "short_name": "卓球記録",
+  "description": "卓球の試合を1点単位で記録し、端末内で振り返る",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f2f2",
+  "theme_color": "#b68235",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

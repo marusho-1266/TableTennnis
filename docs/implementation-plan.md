@@ -515,13 +515,13 @@
 **Description:** `vite-plugin-pwa` でインストール可能にし、初回読み込み後はオフラインで開始・記録・保存・閲覧できるようにする。更新時に保存済み試合を消さない。
 
 **Acceptance criteria:**
-- [ ] ホーム画面追加用のマニフェストがある
-- [ ] 初回読み込み後、オフラインで主要機能が動く
-- [ ] 再デプロイ想定の更新後も IndexedDB のデータが残る
+- [x] ホーム画面追加用のマニフェストがある
+- [x] 初回読み込み後、オフラインで主要機能が動く
+- [x] 再デプロイ想定の更新後も IndexedDB のデータが残る
 
 **Verification:**
-- [ ] `npm run build`
-- [ ] Manual check: ビルドプレビューをオフラインにし、記録と履歴閲覧ができる
+- [x] `npm run build`
+- [x] Manual check: ビルドプレビューをオフラインにし、記録と履歴閲覧ができる
 
 **Dependencies:** Task 2, Task 19
 
