@@ -431,3 +431,42 @@
   margin-top: 8px;
   min-height: 52px;
 }
+
+.resume-banner {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.resume-kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.resume-names {
+  margin: 6px 0 12px;
+  font-family: var(--font-heading);
+  font-size: 19px;
+}
+
+.resume-banner .btn {
+  margin: 0;
+  min-height: 48px;
+}
+
+.dialog-backdrop {
+  z-index: 60;
+}
+
+.dialog .btn {
+  margin: 0;
+}
+
+.dialog {
+  gap: 12px;
+}

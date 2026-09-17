@@ -14,6 +14,7 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
   const [screen, setScreen] = useState<"setup" | "scoring" | "summary">("setup");
   const [ready, setReady] = useState(false);
   const [initialMatch, setInitialMatch] = useState<Match | null>(null);
+  const [inProgressMatch, setInProgressMatch] = useState<Match | null>(null);
   const [resolvedRepository, setResolvedRepository] = useState<MatchRepository | undefined>(
     repository,
   );
@@ -28,10 +29,7 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
         return;
       }
       setResolvedRepository(activeRepository);
-      setInitialMatch(match);
-      if (match) {
-        setScreen("scoring");
-      }
+      setInProgressMatch(match);
       setReady(true);
     }
 
@@ -52,6 +50,14 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
   if (screen === "setup" || !initialMatch) {
     return (
       <MatchSetupScreen
+        inProgressMatch={inProgressMatch}
+        onResume={() => {
+          if (!inProgressMatch) {
+            return;
+          }
+          setInitialMatch(inProgressMatch);
+          setScreen("scoring");
+        }}
         onStart={(playerName, opponentName) => {
           setInitialMatch({
             id: crypto.randomUUID(),

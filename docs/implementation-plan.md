@@ -390,13 +390,13 @@
 **Description:** 進行中試合があるときホームで再開できるようにし、新規開始前に確認ダイアログを出す。
 
 **Acceptance criteria:**
-- [ ] 進行中試合は完了一覧と区別して保持する
-- [ ] 新規開始前に確認し、承認時のみ新しい試合になる
-- [ ] 拒否時は既存の進行中試合を維持する
+- [x] 進行中試合は完了一覧と区別して保持する
+- [x] 新規開始前に確認し、承認時のみ新しい試合になる
+- [x] 拒否時は既存の進行中試合を維持する
 
 **Verification:**
-- [ ] `npx vitest run src/features/match-setup`
-- [ ] Manual check: 進行中を残したまま新規開始をキャンセルできる
+- [x] `npx vitest run src/features/match-setup`
+- [x] Manual check: 進行中を残したまま新規開始をキャンセルできる
 
 **Dependencies:** Task 15
 
@@ -409,8 +409,8 @@
 
 ### Checkpoint: Persistence
 
-- [ ] 名前入力 → 記録 → 再読み込み復元 → Undo → ゲーム終了が永続化される
-- [ ] 保存失敗を成功として扱わない
+- [x] 名前入力 → 記録 → 再読み込み復元 → Undo → ゲーム終了が永続化される
+- [x] 保存失敗を成功として扱わない
 - [ ] レビュー後に Phase 4 へ進む
 
 ### Phase 4: Summary and History

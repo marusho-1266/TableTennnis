@@ -40,6 +40,7 @@ describe("match persistence", () => {
     unmount();
     render(<App tapGuardMs={0} />);
 
+    await user.click(await screen.findByRole("button", { name: "試合を再開" }));
     expect(await screen.findByText("G1 1-0")).toBeTruthy();
     expect(screen.getByText("1")).toBeTruthy();
   });
@@ -64,6 +65,7 @@ describe("match persistence", () => {
     unmount();
     render(<App tapGuardMs={0} />);
 
+    await user.click(await screen.findByRole("button", { name: "試合を再開" }));
     expect(await screen.findByText("G1 1-0")).toBeTruthy();
     expect(screen.queryByText("G1 1-1")).toBeNull();
   });
