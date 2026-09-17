@@ -2,9 +2,10 @@ import { render, screen } from "@testing-library/react";
 import { App } from "./App";
 
 describe("App", () => {
-  it("renders the app title", () => {
+  it("renders the live scoring screen", () => {
     render(<App />);
 
-    expect(screen.getByRole("main").textContent).toBe("卓球試合記録");
+    expect(screen.getByText("第1ゲーム")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "得点" })).toBeTruthy();
   });
 });

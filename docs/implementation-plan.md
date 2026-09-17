@@ -131,13 +131,13 @@
 **Description:** 保存済みポイントだけを入力に、現在ゲーム、スコア、ゲーム取得、直近3件、全履歴、終了状態を組み立てる。Undoは末尾削除後に再導出する。
 
 **Acceptance criteria:**
-- [ ] `scoreAfter` がなくてもポイント列から現在スコアを再計算できる
-- [ ] ゲームをまたいでもゲーム番号と取得数が正しい
-- [ ] 末尾削除を繰り返すとゲーム終了・試合終了が巻き戻る
-- [ ] 直近表示は現在ゲームの新しい順最大3件である
+- [x] `scoreAfter` がなくてもポイント列から現在スコアを再計算できる
+- [x] ゲームをまたいでもゲーム番号と取得数が正しい
+- [x] 末尾削除を繰り返すとゲーム終了・試合終了が巻き戻る
+- [x] 直近表示は現在ゲームの新しい順最大3件である
 
 **Verification:**
-- [ ] `npx vitest run src/domain/match/derive.test.ts`
+- [x] `npx vitest run src/domain/match/derive.test.ts`
 
 **Dependencies:** Task 4
 
@@ -150,8 +150,8 @@
 
 ### Checkpoint: Foundation
 
-- [ ] `npm run test && npm run typecheck && npm run build` が成功する
-- [ ] ドメインにUIやIndexedDB依存がない
+- [x] `npm run test && npm run typecheck && npm run build` が成功する
+- [x] ドメインにUIやIndexedDB依存がない
 - [ ] レビュー後に Phase 2 へ進む
 
 ### Phase 2: Core Scoring UI
@@ -161,10 +161,10 @@
 **Description:** ヘッダ、スコアボード、デュース表示、直近ポイント、得点／失点、1点戻す／試合の確認を、デザイン案の階層と寸法で静的に組む。
 
 **Acceptance criteria:**
-- [ ] 360px幅で横スクロールしない
-- [ ] 得点は実線＋「＋」、失点は破線＋「−」で区別できる
-- [ ] 主要タップ領域が最小44×44 CSS px である
-- [ ] iOSフレームは描画しない
+- [x] 360px幅で横スクロールしない
+- [x] 得点は実線＋「＋」、失点は破線＋「−」で区別できる
+- [x] 主要タップ領域が最小44×44 CSS px である
+- [x] iOSフレームは描画しない
 
 **Verification:**
 - [ ] `npx vitest run src/features/scoring`
