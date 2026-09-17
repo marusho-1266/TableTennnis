@@ -15,6 +15,7 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
   const [ready, setReady] = useState(false);
   const [initialMatch, setInitialMatch] = useState<Match | null>(null);
   const [inProgressMatch, setInProgressMatch] = useState<Match | null>(null);
+  const [completedMatch, setCompletedMatch] = useState<Match | null>(null);
   const [resolvedRepository, setResolvedRepository] = useState<MatchRepository | undefined>(
     repository,
   );
@@ -43,8 +44,8 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
     return <p>読み込み中</p>;
   }
 
-  if (screen === "summary") {
-    return <MatchSummaryScreen />;
+  if (screen === "summary" && completedMatch) {
+    return <MatchSummaryScreen match={completedMatch} />;
   }
 
   if (screen === "setup" || !initialMatch) {
@@ -81,7 +82,10 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
       tapGuardMs={tapGuardMs}
       initialMatch={initialMatch}
       repository={resolvedRepository}
-      onViewResults={() => setScreen("summary")}
+      onViewResults={(match) => {
+        setCompletedMatch(match);
+        setScreen("summary");
+      }}
     />
   );
 }

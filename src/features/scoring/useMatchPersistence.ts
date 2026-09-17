@@ -78,6 +78,15 @@ export function useMatchPersistence({
   return {
     saveError,
     retrySave: () => setRetryCount((count) => count + 1),
+    snapshot: {
+      id: matchId,
+      playerName,
+      opponentName,
+      startedAt,
+      completedAt: matchOver ? new Date().toISOString() : null,
+      status: matchOver ? ("completed" as const) : ("in_progress" as const),
+      points: toStoredPoints(history),
+    },
   };
 }
 

@@ -470,3 +470,27 @@
 .dialog {
   gap: 12px;
 }
+
+.summary-screen {
+  overflow: auto;
+}
+
+.summary-block {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.summary-block h2 {
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+
+.summary-block h3 {
+  font-size: 16px;
+  margin: 10px 0 6px;
+}
+
+.summary-game-stats,
+.summary-table {
+  margin-bottom: 12px;
+}

@@ -440,14 +440,14 @@
 **Description:** 勝敗、名前、日時、ゲーム取得数、各ゲームスコア、ゲーム別集計、全体集計、時系列ポイント履歴を表示する。自動分析文言は置かない。
 
 **Acceptance criteria:**
-- [ ] 仕様 3.9 の4ブロックがすべて出る
-- [ ] 表示値がポイント列と一致する
-- [ ] 「弱点」「練習」「敗因」などの分析文言がない
-- [ ] トークンと outlined UI を試合中画面と共有する
+- [x] 仕様 3.9 の4ブロックがすべて出る
+- [x] 表示値がポイント列と一致する
+- [x] 「弱点」「練習」「敗因」などの分析文言がない
+- [x] トークンと outlined UI を試合中画面と共有する
 
 **Verification:**
-- [ ] `npx vitest run src/features/match-summary`
-- [ ] Manual check: 短い試合を1本記録し、結果の件数を手計算と照合する
+- [x] `npx vitest run src/features/match-summary`
+- [x] Manual check: 短い試合を1本記録し、結果の件数を手計算と照合する
 
 **Dependencies:** Task 12, Task 17
 

@@ -13,7 +13,7 @@ export interface ScoringSessionProps {
   tapGuardMs?: number;
   initialMatch?: Match | null;
   repository?: MatchRepository;
-  onViewResults?: () => void;
+  onViewResults?: (match: Match) => void;
 }
 
 export function ScoringSession({
@@ -46,7 +46,7 @@ export function ScoringSession({
           score: `${scoring.view.gamesWon.player} – ${scoring.view.gamesWon.opponent}`,
           note: `${playerName} 対 ${opponentName} ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}`,
           primaryLabel: "試合結果を見る",
-          onPrimary: onViewResults,
+          onPrimary: () => onViewResults?.(persistence.snapshot),
         }
       : scoring.showGameEnd
         ? {
