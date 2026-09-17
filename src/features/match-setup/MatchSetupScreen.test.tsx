@@ -34,6 +34,9 @@ describe("MatchSetupScreen", () => {
     expect(onStart).toHaveBeenCalledWith("本田 悠真", "佐々木 蓮");
     expect(screen.getByLabelText("記録対象選手名").className).toContain("input");
     expect(screen.getByRole("button", { name: "試合開始" }).className).toContain("btn-primary");
+    expect(
+      screen.getByText("記録はこの端末内に保存されます。ブラウザのデータを消すと復元できません。"),
+    ).toBeTruthy();
   });
 
   it("offers resume and asks before starting a new match over an in-progress one", async () => {

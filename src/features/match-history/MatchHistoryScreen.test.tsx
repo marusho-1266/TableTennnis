@@ -21,6 +21,12 @@ describe("MatchHistoryScreen", () => {
     await user.click(screen.getByRole("button", { name: /本田 悠真/ }));
     expect(onSelect).toHaveBeenCalledWith(newer);
   });
+
+  it("keeps an empty completed list usable", () => {
+    render(<MatchHistoryScreen matches={[]} onSelect={() => undefined} />);
+
+    expect(screen.getByText("まだ完了した試合はありません。")).toBeTruthy();
+  });
 });
 
 function completedMatch(

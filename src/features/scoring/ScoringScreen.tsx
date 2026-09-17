@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Banner } from "../../components/Banner";
 
 export interface PointLineView {
   head: string;
@@ -58,12 +59,9 @@ export function ScoringScreen({
         </p>
       </header>
       {saveError ? (
-        <div className="save-banner" role="alert">
-          <span>保存に失敗しました。</span>
-          <button type="button" className="btn btn-secondary" onClick={onRetrySave}>
-            再試行
-          </button>
-        </div>
+        <Banner actionLabel="再試行" onAction={onRetrySave}>
+          保存に失敗しました。
+        </Banner>
       ) : null}
 
       <section className="scoreboard" aria-label="現在のスコア">

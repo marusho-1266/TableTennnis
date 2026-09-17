@@ -78,6 +78,9 @@ export function MatchSetupScreen({
           過去の試合
         </button>
       ) : null}
+      <p className="data-notice">
+        記録はこの端末内に保存されます。ブラウザのデータを消すと復元できません。
+      </p>
       {confirming ? (
         <div className="dialog-backdrop">
           <div className="dialog" role="dialog" aria-modal="true" aria-label="新しい試合の確認">

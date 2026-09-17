@@ -494,12 +494,12 @@
 **Description:** 履歴空状態、保存エラー、ブラウザデータ削除で復元できない旨を、試合開始または一覧に明示する。
 
 **Acceptance criteria:**
-- [ ] 保存エラーが再試行可能な通知として残る
-- [ ] データ消去で復元できないことが利用者に伝わる
-- [ ] 空の過去一覧が壊れない
+- [x] 保存エラーが再試行可能な通知として残る
+- [x] データ消去で復元できないことが利用者に伝わる
+- [x] 空の過去一覧が壊れない
 
 **Verification:**
-- [ ] `npx vitest run src/features/match-history src/features/match-setup`
+- [x] `npx vitest run src/features/match-history src/features/match-setup`
 
 **Dependencies:** Task 19
 
