@@ -1,5 +1,6 @@
 import { act, render, renderHook, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { App } from "../../app/App";
 import { ScoringSession } from "./ScoringSession";
 import { useScoringInput } from "./useScoringInput";
 
@@ -115,6 +116,43 @@ describe("game end acknowledgement", () => {
   });
 });
 
+describe("match end overlay", () => {
+  it("shows the match-end overlay after three games and returns to play on undo", () => {
+    const { result } = renderHook(() => useScoringInput({ tapGuardMs: 0, now: incrementingNow() }));
+
+    winMatchFor(result, "player");
+
+    expect(result.current.showMatchEnd).toBe(true);
+    expect(result.current.showGameEnd).toBe(false);
+    expect(result.current.view.gamesWon).toEqual({ player: 3, opponent: 0 });
+
+    act(() => result.current.undo());
+
+    expect(result.current.showMatchEnd).toBe(false);
+    expect(result.current.view.matchOver).toBe(false);
+    expect(result.current.view.current.gameNumber).toBe(3);
+    expect(result.current.view.current.playerScore).toBe(10);
+  });
+
+  it("opens the results placeholder from 試合結果を見る and never offers a new match", async () => {
+    const user = userEvent.setup();
+    render(<App tapGuardMs={0} />);
+
+    await winMatchOnScreen(user, "player");
+
+    const overlay = screen.getByRole("dialog", { name: "試合終了" });
+    expect(within(overlay).getByText("勝利")).toBeTruthy();
+    expect(within(overlay).getByText("3 – 0")).toBeTruthy();
+    expect(within(overlay).getByRole("button", { name: "試合結果を見る" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "新しい試合を始める" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "次のゲームへ" })).toBeNull();
+
+    await user.click(within(overlay).getByRole("button", { name: "試合結果を見る" }));
+
+    expect(screen.getByRole("heading", { name: "試合結果" })).toBeTruthy();
+  });
+});
+
 function incrementingNow() {
   let current = 0;
   return () => {
@@ -135,6 +173,18 @@ function winGameFor(
   }
 }
 
+function winMatchFor(
+  result: { current: ReturnType<typeof useScoringInput> },
+  winner: "player" | "opponent",
+) {
+  for (let game = 0; game < 3; game += 1) {
+    winGameFor(result, winner);
+    if (game < 2) {
+      act(() => result.current.acknowledgeGameEnd());
+    }
+  }
+}
+
 async function winGameOnScreen(
   user: { click: (element: HTMLElement) => Promise<void> },
   winner: "player" | "opponent",
@@ -145,5 +195,17 @@ async function winGameOnScreen(
   for (let index = 0; index < 11; index += 1) {
     await user.click(screen.getByRole("button", { name: outcome }));
     await user.click(screen.getByRole("button", { name: category }));
+  }
+}
+
+async function winMatchOnScreen(
+  user: { click: (element: HTMLElement) => Promise<void> },
+  winner: "player" | "opponent",
+) {
+  for (let game = 0; game < 3; game += 1) {
+    await winGameOnScreen(user, winner);
+    if (game < 2) {
+      await user.click(screen.getByRole("button", { name: "次のゲームへ" }));
+    }
   }
 }

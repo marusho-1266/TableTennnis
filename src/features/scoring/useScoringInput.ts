@@ -104,12 +104,13 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
   const view = useMemo(() => deriveMatch(points), [points]);
   const acknowledged = Math.min(acknowledgedGames, view.games.length);
   const showGameEnd = view.games.length > acknowledged && !view.matchOver;
+  const showMatchEnd = view.matchOver;
   const recent = view.recentCurrentGame.map(formatPointLine);
 
   const historyItems = [...view.history].reverse().map(formatPointLine);
 
   function pickOutcome(outcome: PointOutcome) {
-    if (showGameEnd) {
+    if (showGameEnd || showMatchEnd) {
       return;
     }
     setSheet({ outcome, category: null });
@@ -126,6 +127,7 @@ export function useScoringInput(options: UseScoringInputOptions = {}) {
     sheetStepLabel,
     sheetTrail,
     showGameEnd,
+    showMatchEnd,
     pickWon: () => pickOutcome("won"),
     pickLost: () => pickOutcome("lost"),
     selectCategory,

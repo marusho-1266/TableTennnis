@@ -294,14 +294,14 @@
 **Description:** 3ゲーム先取で試合終了オーバーレイを出し、主ボタンで結果画面へ遷移する。結果画面はこの時点ではプレースホルダでよい。
 
 **Acceptance criteria:**
-- [ ] 3ゲーム先取で「試合終了」オーバーレイになる
-- [ ] 主ボタンは「試合結果を見る」である
-- [ ] 結果へ進む前ならUndoで試合を再開できる
-- [ ] 試作の「新しい試合を始める」は出ない
+- [x] 3ゲーム先取で「試合終了」オーバーレイになる
+- [x] 主ボタンは「試合結果を見る」である
+- [x] 結果へ進む前ならUndoで試合を再開できる
+- [x] 試作の「新しい試合を始める」は出ない
 
 **Verification:**
-- [ ] `npx vitest run src/features/scoring`
-- [ ] Manual check: 3ゲーム先取後の文言と遷移先を確認する
+- [x] `npx vitest run src/features/scoring`
+- [x] Manual check: 3ゲーム先取後の文言と遷移先を確認する
 
 **Dependencies:** Task 11
 
@@ -314,9 +314,9 @@
 
 ### Checkpoint: Core Scoring
 
-- [ ] メモリ上で試合開始相当の固定選手名から、記録・Undo・確認・ゲーム跨ぎ・試合終了まで通る
-- [ ] 試合中UIがデザイン案と目視で一致する
-- [ ] `npm run test && npm run build` が成功する
+- [x] メモリ上で試合開始相当の固定選手名から、記録・Undo・確認・ゲーム跨ぎ・試合終了まで通る
+- [x] 試合中UIがデザイン案と目視で一致する
+- [x] `npm run test && npm run build` が成功する
 - [ ] レビュー後に Phase 3 へ進む
 
 ### Phase 3: Persistence and Setup

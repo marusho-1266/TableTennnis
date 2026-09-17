@@ -8,11 +8,38 @@ export interface ScoringSessionProps {
   playerName: string;
   opponentName: string;
   tapGuardMs?: number;
+  onViewResults?: () => void;
 }
 
-export function ScoringSession({ playerName, opponentName, tapGuardMs }: ScoringSessionProps) {
+export function ScoringSession({
+  playerName,
+  opponentName,
+  tapGuardMs,
+  onViewResults,
+}: ScoringSessionProps) {
   const scoring = useScoringInput({ tapGuardMs });
   const lastCompletedGame = scoring.view.games.at(-1);
+  const overlay = lastCompletedGame
+    ? scoring.showMatchEnd
+      ? {
+          kicker: "試合終了",
+          title: scoring.view.gamesWon.player === 3 ? "勝利" : "敗戦",
+          score: `${scoring.view.gamesWon.player} – ${scoring.view.gamesWon.opponent}`,
+          note: `${playerName} 対 ${opponentName} ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}`,
+          primaryLabel: "試合結果を見る",
+          onPrimary: onViewResults,
+        }
+      : scoring.showGameEnd
+        ? {
+            kicker: `第${lastCompletedGame.gameNumber}ゲーム終了`,
+            title: `${lastCompletedGame.winner === "player" ? playerName : opponentName} のゲーム`,
+            score: `${lastCompletedGame.playerScore} – ${lastCompletedGame.opponentScore}`,
+            note: `ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}。3ゲーム先取で試合終了。`,
+            primaryLabel: "次のゲームへ",
+            onPrimary: scoring.acknowledgeGameEnd,
+          }
+        : null
+    : null;
 
   return (
     <ScoringScreen
@@ -27,24 +54,24 @@ export function ScoringSession({ playerName, opponentName, tapGuardMs }: Scoring
       recent={scoring.recent}
       noPoints={scoring.points.length === 0}
       undoDisabled={scoring.points.length === 0}
-      inputLocked={scoring.showGameEnd}
+      inputLocked={scoring.showGameEnd || scoring.showMatchEnd}
       onWon={scoring.pickWon}
       onLost={scoring.pickLost}
       onUndo={scoring.undo}
       onOpenHistory={scoring.openHistory}
     >
-      {scoring.showGameEnd && lastCompletedGame ? (
+      {overlay ? (
         <GameEndOverlay
-          kicker={`第${lastCompletedGame.gameNumber}ゲーム終了`}
-          title={`${lastCompletedGame.winner === "player" ? playerName : opponentName} のゲーム`}
-          score={`${lastCompletedGame.playerScore} – ${lastCompletedGame.opponentScore}`}
-          note={`ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}。3ゲーム先取で試合終了。`}
+          kicker={overlay.kicker}
+          title={overlay.title}
+          score={overlay.score}
+          note={overlay.note}
           gameLines={scoring.view.games.map((game) => ({
             label: `第${game.gameNumber}ゲーム`,
             score: `${game.playerScore} – ${game.opponentScore}${game.winner === "player" ? "　◦ 獲得" : ""}`,
           }))}
-          primaryLabel="次のゲームへ"
-          onPrimary={scoring.acknowledgeGameEnd}
+          primaryLabel={overlay.primaryLabel}
+          onPrimary={overlay.onPrimary ?? (() => undefined)}
           onUndo={scoring.undo}
         />
       ) : null}
