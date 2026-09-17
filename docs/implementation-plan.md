@@ -111,12 +111,12 @@
 **Description:** 11点・2点差、デュース継続、3ゲーム先取を純粋関数で判定する。
 
 **Acceptance criteria:**
-- [ ] 11-0、11-9 でゲーム終了、10-10 / 11-10 は継続、12-10 / 15-13 で終了する
-- [ ] ゲーム取得数が3になった側で試合終了する
-- [ ] 双方10点以上をデュース状態と判定できる
+- [x] 11-0、11-9 でゲーム終了、10-10 / 11-10 は継続、12-10 / 15-13 で終了する
+- [x] ゲーム取得数が3になった側で試合終了する
+- [x] 双方10点以上をデュース状態と判定できる
 
 **Verification:**
-- [ ] `npx vitest run src/domain/match/rules.test.ts`
+- [x] `npx vitest run src/domain/match/rules.test.ts`
 
 **Dependencies:** Task 3
 
