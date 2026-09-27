@@ -24,7 +24,7 @@ export async function createMatchRepository(): Promise<MatchRepository> {
       const database = await openMatchDb();
       try {
         const record = await database.get(MATCH_STORE, id);
-        return isMatch(record) ? record : null;
+        return readMatch(record);
       } finally {
         database.close();
       }
@@ -35,7 +35,8 @@ export async function createMatchRepository(): Promise<MatchRepository> {
         const records = await database.getAll(MATCH_STORE);
         return (
           records
-            .filter(isMatch)
+            .map(readMatch)
+            .filter((match) => match !== null)
             .filter((match) => match.status === "in_progress")
             .sort((left, right) => right.startedAt.localeCompare(left.startedAt))[0] ?? null
         );
@@ -48,7 +49,8 @@ export async function createMatchRepository(): Promise<MatchRepository> {
       try {
         const records = await database.getAll(MATCH_STORE);
         return records
-          .filter(isMatch)
+          .map(readMatch)
+          .filter((match) => match !== null)
           .filter((match) => match.status === "completed")
           .sort((left, right) => right.startedAt.localeCompare(left.startedAt));
       } finally {
@@ -58,7 +60,15 @@ export async function createMatchRepository(): Promise<MatchRepository> {
   };
 }
 
-function isMatch(value: unknown): value is Match {
+function readMatch(value: unknown): Match | null {
+  if (!isStoredMatch(value)) {
+    return null;
+  }
+
+  return { ...value, manualEnd: value.manualEnd === true };
+}
+
+function isStoredMatch(value: unknown): value is Omit<Match, "manualEnd"> & { manualEnd?: boolean } {
   if (!isRecord(value)) {
     return false;
   }
@@ -70,6 +80,7 @@ function isMatch(value: unknown): value is Match {
     typeof value.startedAt === "string" &&
     (typeof value.completedAt === "string" || value.completedAt === null) &&
     (value.status === "in_progress" || value.status === "completed") &&
+    (value.manualEnd === undefined || typeof value.manualEnd === "boolean") &&
     Array.isArray(value.points) &&
     value.points.every(isPoint)
   );

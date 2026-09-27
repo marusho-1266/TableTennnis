@@ -79,6 +79,15 @@ describe("deriveMatch", () => {
     expect(deriveMatch(almost.slice(0, -1)).deuce).toBe(false);
   });
 
+  it("counts an unfinished game's points without awarding that game", () => {
+    const view = deriveMatch([...winGame("player"), point("won", "サーブ", "エース")]);
+
+    expect(view.gamesWon).toEqual({ player: 1, opponent: 0 });
+    expect(view.matchOver).toBe(false);
+    expect(view.current.points).toHaveLength(1);
+    expect(view.current.points[0]?.category).toBe("サーブ");
+  });
+
   it("ends the match when a side wins three games", () => {
     const view = deriveMatch([...winGame("player"), ...winGame("player"), ...winGame("player")]);
 

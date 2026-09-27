@@ -70,6 +70,7 @@ function mixedGameMatch(): Match {
     startedAt: "2026-09-17T13:00:00.000Z",
     completedAt: null,
     status: "in_progress",
+    manualEnd: false,
     points,
   };
 }
@@ -112,6 +113,7 @@ function sampleMatch(): Match {
     startedAt: "2026-09-17T13:00:00.000Z",
     completedAt: "2026-09-17T13:20:00.000Z",
     status: "completed",
+    manualEnd: false,
     points,
   };
 }

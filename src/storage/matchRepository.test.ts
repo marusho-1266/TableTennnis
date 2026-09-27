@@ -10,6 +10,7 @@ const sampleMatch: Match = {
   startedAt: "2026-09-17T13:00:00.000Z",
   completedAt: null,
   status: "in_progress",
+  manualEnd: false,
   points: [
     {
       id: "p1",
@@ -44,6 +45,28 @@ describe("matchRepository", () => {
 
   it("exposes a numbered schema version", () => {
     expect(SCHEMA_VERSION).toBe(1);
+  });
+
+  it("reads a stored match without manualEnd as not ended early", async () => {
+    const db = await openMatchDb();
+    const { manualEnd, ...legacy } = sampleMatch;
+    expect(manualEnd).toBe(false);
+    await db.put(MATCH_STORE, legacy);
+    db.close();
+
+    const repository = await createMatchRepository();
+
+    expect(await repository.getById("match-1")).toEqual({ ...sampleMatch, manualEnd: false });
+  });
+
+  it("rejects a stored manualEnd that is not a boolean", async () => {
+    const db = await openMatchDb();
+    await db.put(MATCH_STORE, { ...sampleMatch, manualEnd: "yes" });
+    db.close();
+
+    const repository = await createMatchRepository();
+
+    expect(await repository.getById("match-1")).toBeNull();
   });
 
   it("does not return invalid stored records", async () => {

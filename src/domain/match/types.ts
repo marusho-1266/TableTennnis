@@ -9,6 +9,7 @@ export interface Match {
   startedAt: string;
   completedAt: string | null;
   status: MatchStatus;
+  manualEnd: boolean;
   points: Point[];
 }
 

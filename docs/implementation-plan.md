@@ -583,13 +583,13 @@
 **Description:** 3ゲーム先取前の終了を `manualEnd` で表す。既存データに項目が無くても `false` と読み、勝敗はゲーム取得数の比較、同数は引き分けにする。
 
 **Acceptance criteria:**
-- [ ] `manualEnd` が無い保存データは途中終了ではない
-- [ ] 1-0 の途中終了は記録対象の勝利、1-1 は引き分けになる
-- [ ] 未完了ゲームのポイントは集計に含まれ、ゲーム取得数には含まれない
-- [ ] 3ゲーム先取の自動終了は `manualEnd: false` のままである
+- [x] `manualEnd` が無い保存データは途中終了ではない
+- [x] 1-0 の途中終了は記録対象の勝利、1-1 は引き分けになる
+- [x] 未完了ゲームのポイントは集計に含まれ、ゲーム取得数には含まれない
+- [x] 3ゲーム先取の自動終了は `manualEnd: false` のままである
 
 **Verification:**
-- [ ] `npx vitest run src/domain/match src/storage tests/integration`
+- [x] `npx vitest run src/domain/match src/storage tests/integration`
 
 **Dependencies:** Task 14, Task 17
 

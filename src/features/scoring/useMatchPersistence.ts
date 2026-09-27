@@ -10,6 +10,7 @@ export interface UseMatchPersistenceOptions {
   points: PointInput[];
   history: DerivedPoint[];
   matchOver: boolean;
+  manualEnd?: boolean;
   repository?: MatchRepository;
 }
 
@@ -20,6 +21,7 @@ export function useMatchPersistence({
   points,
   history,
   matchOver,
+  manualEnd = false,
   repository,
 }: UseMatchPersistenceOptions) {
   const [matchId] = useState(() => initialMatch?.id ?? crypto.randomUUID());
@@ -45,6 +47,7 @@ export function useMatchPersistence({
           startedAt,
           completedAt: matchOver ? new Date().toISOString() : null,
           status: matchOver ? "completed" : "in_progress",
+          manualEnd,
           points: toStoredPoints(history),
         });
         if (!cancelled) {
@@ -65,6 +68,7 @@ export function useMatchPersistence({
   }, [
     hasSaved,
     history,
+    manualEnd,
     matchId,
     matchOver,
     opponentName,
@@ -85,6 +89,7 @@ export function useMatchPersistence({
       startedAt,
       completedAt: matchOver ? new Date().toISOString() : null,
       status: matchOver ? ("completed" as const) : ("in_progress" as const),
+      manualEnd,
       points: toStoredPoints(history),
     },
   };

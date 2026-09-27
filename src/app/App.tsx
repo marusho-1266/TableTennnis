@@ -89,6 +89,7 @@ export function App({ tapGuardMs, repository }: AppProps = {}) {
             startedAt: new Date().toISOString(),
             completedAt: null,
             status: "in_progress",
+            manualEnd: false,
             points: [],
           });
           setScreen("scoring");

@@ -42,6 +42,7 @@ function completedMatch(
     startedAt,
     completedAt: startedAt,
     status: "completed",
+    manualEnd: false,
     points: Array.from({ length: 33 }, (_, index) => ({
       id: `${id}-${index}`,
       sequence: index + 1,
