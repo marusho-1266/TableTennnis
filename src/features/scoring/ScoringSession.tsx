@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { matchOutcome } from "../../domain/match/result";
 import type { Match } from "../../domain/match/types";
 import type { MatchRepository } from "../../storage/matchRepository";
 import { CategorySheet } from "./CategorySheet";
@@ -28,6 +30,8 @@ export function ScoringSession({
     tapGuardMs,
     initialPoints: initialMatch?.points,
   });
+  const [confirmEnd, setConfirmEnd] = useState(false);
+  const [manualEnd, setManualEnd] = useState(false);
   const persistence = useMatchPersistence({
     playerName,
     opponentName,
@@ -38,27 +42,64 @@ export function ScoringSession({
     repository,
   });
   const lastCompletedGame = scoring.view.games.at(-1);
-  const overlay = lastCompletedGame
-    ? scoring.showMatchEnd
-      ? {
-          kicker: "試合終了",
-          title: scoring.view.gamesWon.player === 3 ? "勝利" : "敗戦",
-          score: `${scoring.view.gamesWon.player} – ${scoring.view.gamesWon.opponent}`,
-          note: `${playerName} 対 ${opponentName} ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}`,
-          primaryLabel: "試合結果を見る",
-          onPrimary: () => onViewResults?.(persistence.snapshot),
-        }
-      : scoring.showGameEnd
+  const outcome = matchOutcome(scoring.view.gamesWon.player, scoring.view.gamesWon.opponent);
+  const gameScore = `${scoring.view.gamesWon.player} – ${scoring.view.gamesWon.opponent}`;
+
+  async function viewResults() {
+    if (!manualEnd) {
+      onViewResults?.(persistence.snapshot);
+      return;
+    }
+
+    const match: Match = {
+      ...persistence.snapshot,
+      status: "completed",
+      manualEnd: true,
+      completedAt: new Date().toISOString(),
+    };
+    await repository?.save(match);
+    onViewResults?.(match);
+  }
+
+  const overlay = manualEnd
+    ? {
+        kicker: "試合終了",
+        title: outcome,
+        score: gameScore,
+        note: `${playerName} 対 ${opponentName} ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}`,
+        primaryLabel: "試合結果を見る",
+        secondaryLabel: "試合に戻る",
+        onPrimary: () => void viewResults(),
+        onSecondary: () => setManualEnd(false),
+        onEndMatch: undefined,
+      }
+    : lastCompletedGame
+      ? scoring.showMatchEnd
         ? {
-            kicker: `第${lastCompletedGame.gameNumber}ゲーム終了`,
-            title: `${lastCompletedGame.winner === "player" ? playerName : opponentName} のゲーム`,
-            score: `${lastCompletedGame.playerScore} – ${lastCompletedGame.opponentScore}`,
-            note: `ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}。3ゲーム先取で試合終了。`,
-            primaryLabel: "次のゲームへ",
-            onPrimary: scoring.acknowledgeGameEnd,
+            kicker: "試合終了",
+            title: outcome,
+            score: gameScore,
+            note: `${playerName} 対 ${opponentName} ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}`,
+            primaryLabel: "試合結果を見る",
+            secondaryLabel: "1点戻す",
+            onPrimary: () => void viewResults(),
+            onSecondary: scoring.undo,
+            onEndMatch: undefined,
           }
-        : null
-    : null;
+        : scoring.showGameEnd
+          ? {
+              kicker: `第${lastCompletedGame.gameNumber}ゲーム終了`,
+              title: `${lastCompletedGame.winner === "player" ? playerName : opponentName} のゲーム`,
+              score: `${lastCompletedGame.playerScore} – ${lastCompletedGame.opponentScore}`,
+              note: `ゲーム取得数 ${scoring.view.gamesWon.player}–${scoring.view.gamesWon.opponent}。3ゲーム先取で試合終了。`,
+              primaryLabel: "次のゲームへ",
+              secondaryLabel: "1点戻す",
+              onPrimary: scoring.acknowledgeGameEnd,
+              onSecondary: scoring.undo,
+              onEndMatch: () => setConfirmEnd(true),
+            }
+          : null
+      : null;
 
   return (
     <ScoringScreen
@@ -73,13 +114,18 @@ export function ScoringSession({
       recent={scoring.recent}
       noPoints={scoring.points.length === 0}
       undoDisabled={scoring.points.length === 0}
-      inputLocked={scoring.showGameEnd || scoring.showMatchEnd}
+      inputLocked={scoring.showGameEnd || scoring.showMatchEnd || manualEnd}
       saveError={persistence.saveError}
       onRetrySave={persistence.retrySave}
       onWon={scoring.pickWon}
       onLost={scoring.pickLost}
       onUndo={scoring.undo}
       onOpenHistory={scoring.openHistory}
+      onEndMatch={
+        scoring.view.matchOver || scoring.showGameEnd || manualEnd
+          ? undefined
+          : () => setConfirmEnd(true)
+      }
     >
       {overlay ? (
         <GameEndOverlay
@@ -92,8 +138,10 @@ export function ScoringSession({
             score: `${game.playerScore} – ${game.opponentScore}${game.winner === "player" ? "　◦ 獲得" : ""}`,
           }))}
           primaryLabel={overlay.primaryLabel}
-          onPrimary={overlay.onPrimary ?? (() => undefined)}
-          onUndo={scoring.undo}
+          secondaryLabel={overlay.secondaryLabel}
+          onPrimary={overlay.onPrimary}
+          onUndo={overlay.onSecondary}
+          onEndMatch={overlay.onEndMatch}
         />
       ) : null}
       {scoring.sheet ? (
@@ -104,6 +152,30 @@ export function ScoringSession({
           onBack={scoring.sheetBack}
           onClose={scoring.closeSheet}
         />
+      ) : null}
+      {confirmEnd ? (
+        <div className="dialog-backdrop">
+          <div className="dialog" role="dialog" aria-modal="true" aria-label="試合終了の確認">
+            <p>この試合を終了します。ゲーム取得数は現在のまま保存されます。</p>
+            <button
+              type="button"
+              className="btn btn-primary btn-block"
+              onClick={() => {
+                setConfirmEnd(false);
+                setManualEnd(true);
+              }}
+            >
+              試合を終了する
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary btn-block"
+              onClick={() => setConfirmEnd(false)}
+            >
+              キャンセル
+            </button>
+          </div>
+        </div>
       ) : null}
       {scoring.historyOpen ? (
         <MatchReview

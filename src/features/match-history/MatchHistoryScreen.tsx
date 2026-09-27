@@ -1,4 +1,5 @@
 import { deriveMatch } from "../../domain/match/derive";
+import { matchOutcome } from "../../domain/match/result";
 import type { Match } from "../../domain/match/types";
 
 export interface MatchHistoryScreenProps {
@@ -21,7 +22,7 @@ export function MatchHistoryScreen({ matches, onSelect, onBack }: MatchHistorySc
             .sort((left, right) => right.startedAt.localeCompare(left.startedAt))
             .map((match) => {
             const view = deriveMatch(match.points);
-            const result = view.gamesWon.player === 3 ? "勝利" : "敗戦";
+            const result = matchOutcome(view.gamesWon.player, view.gamesWon.opponent);
             return (
               <button
                 type="button"

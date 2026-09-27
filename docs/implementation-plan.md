@@ -606,15 +606,15 @@
 **Description:** 試合中画面と、試合未確定のゲーム終了オーバーレイに「試合を終了」を置く。確認後に試合終了オーバーレイを出し、結果へ進む前なら「試合に戻る」でポイントを残して再開できる。
 
 **Acceptance criteria:**
-- [ ] 確認をキャンセルしてもポイントは変わらない
-- [ ] 承認後、結果へ進むと完了試合として保存される
-- [ ] 「試合に戻る」はポイントを消さず、途中終了だけを取り消す
-- [ ] 過去一覧に引き分け、またはゲーム取得数に応じた勝敗が出る
-- [ ] ポイント0件でも終了でき、勝敗は引き分けである
+- [x] 確認をキャンセルしてもポイントは変わらない
+- [x] 承認後、結果へ進むと完了試合として保存される
+- [x] 「試合に戻る」はポイントを消さず、途中終了だけを取り消す
+- [x] 過去一覧に引き分け、またはゲーム取得数に応じた勝敗が出る
+- [x] ポイント0件でも終了でき、勝敗は引き分けである
 
 **Verification:**
-- [ ] `npx vitest run src/features/scoring src/features/match-history src/features/match-summary`
-- [ ] `npm run lint && npm run typecheck && npm run test && npm run build`
+- [x] `npx vitest run src/features/scoring src/features/match-history src/features/match-summary`
+- [x] `npm run lint && npm run typecheck && npm run test && npm run build`
 
 **Dependencies:** Task 23, Task 24
 

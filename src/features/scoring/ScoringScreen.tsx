@@ -26,6 +26,7 @@ export interface ScoringScreenProps {
   onLost: () => void;
   onUndo: () => void;
   onOpenHistory: () => void;
+  onEndMatch?: () => void;
   children?: ReactNode;
 }
 
@@ -48,6 +49,7 @@ export function ScoringScreen({
   onLost,
   onUndo,
   onOpenHistory,
+  onEndMatch,
   children,
 }: ScoringScreenProps) {
   return (
@@ -140,6 +142,16 @@ export function ScoringScreen({
           試合の確認
         </button>
       </div>
+      {onEndMatch ? (
+        <button
+          type="button"
+          className="btn btn-secondary btn-block"
+          disabled={inputLocked}
+          onClick={onEndMatch}
+        >
+          試合を終了
+        </button>
+      ) : null}
       {children}
     </div>
   );

@@ -1,4 +1,5 @@
 import { deriveMatch } from "../../domain/match/derive";
+import { matchOutcome } from "../../domain/match/result";
 import { formatPointLine, formatSharePercent } from "../../domain/match/format";
 import { deriveStats, type CategoryCount } from "../../domain/match/stats";
 import type { Match } from "../../domain/match/types";
@@ -11,7 +12,7 @@ export interface MatchSummaryScreenProps {
 export function MatchSummaryScreen({ match, onBack }: MatchSummaryScreenProps) {
   const view = deriveMatch(match.points);
   const stats = deriveStats(match.points);
-  const result = view.gamesWon.player === 3 ? "勝利" : "敗戦";
+  const result = matchOutcome(view.gamesWon.player, view.gamesWon.opponent);
   const playedAt = new Date(match.startedAt).toLocaleString("ja-JP");
 
   return (

@@ -18,7 +18,22 @@ describe("MatchHistoryScreen", () => {
     expect(items[0]?.textContent).toContain("勝利");
     expect(items[0]?.textContent).toContain("3–0");
 
-    await user.click(screen.getByRole("button", { name: /本田 悠真/ }));
+    render(
+      <MatchHistoryScreen
+        matches={[
+          {
+            ...newer,
+            id: "draw",
+            manualEnd: true,
+            points: [],
+          },
+        ]}
+        onSelect={() => undefined}
+      />,
+    );
+    expect(screen.getByRole("button", { name: /引き分け/ })).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: /本田 悠真.*勝利/ }));
     expect(onSelect).toHaveBeenCalledWith(newer);
   });
 
