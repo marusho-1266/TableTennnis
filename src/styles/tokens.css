@@ -41,9 +41,14 @@
   --color-accent-2-800: #573d14;
   --color-accent-2-900: #382810;
 
+  --color-won: #2563eb;
+  --color-lost: #dc2626;
+
   --font-heading: "Cormorant Garamond", system-ui, sans-serif;
   --font-heading-weight: 600;
   --font-body: "Lora", system-ui, sans-serif;
+  --font-gothic: "Noto Sans JP", "Noto Sans CJK JP", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic",
+    Meiryo, sans-serif;
 
   --space-1: 4.6px;
   --space-2: 9.2px;

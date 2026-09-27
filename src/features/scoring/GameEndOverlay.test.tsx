@@ -104,6 +104,32 @@ describe("game end acknowledgement", () => {
     expect((screen.getByRole("button", { name: "得点" }) as HTMLButtonElement).disabled).toBe(false);
   });
 
+  it("shows overall counts and shares without leaving the finished game", async () => {
+    const user = userEvent.setup();
+    render(<ScoringSession playerName="本田 悠真" opponentName="佐々木 蓮" tapGuardMs={0} />);
+
+    await winGameOnScreen(user, "player");
+    const overlay = screen.getByRole("dialog", { name: "第1ゲーム終了" });
+    await user.click(within(overlay).getByRole("button", { name: "全体集計" }));
+
+    const stats = screen.getByRole("dialog", { name: "全体集計" });
+    expect(within(stats).getAllByText("ポイント数").length).toBeGreaterThan(0);
+    expect(within(stats).getAllByText("構成比").length).toBeGreaterThan(0);
+    expect(within(stats).getByText("11")).toBeTruthy();
+    expect(within(stats).getAllByText("100.0%").length).toBeGreaterThan(0);
+    expect(within(stats).getAllByText("0.0%").length).toBeGreaterThan(0);
+    const history = within(stats).getByRole("region", { name: "ポイント履歴" });
+    expect(within(history).getByText("新しい順・読み取り専用")).toBeTruthy();
+    expect(within(history).getByText("G1 11-0")).toBeTruthy();
+    expect(within(history).getByText("G1 1-0")).toBeTruthy();
+
+    await user.click(within(stats).getByRole("button", { name: "閉じて試合へ戻る" }));
+
+    expect(screen.queryByRole("dialog", { name: "全体集計" })).toBeNull();
+    const returned = screen.getByRole("dialog", { name: "第1ゲーム終了" });
+    expect(within(returned).getByText("11 – 0")).toBeTruthy();
+  });
+
   it("undoes the finished game from the overlay", async () => {
     const user = userEvent.setup();
     render(<ScoringSession playerName="本田 悠真" opponentName="佐々木 蓮" tapGuardMs={0} />);

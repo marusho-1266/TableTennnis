@@ -4,6 +4,7 @@ import type { Match } from "../../domain/match/types";
 import type { MatchRepository } from "../../storage/matchRepository";
 import { CategorySheet } from "./CategorySheet";
 import { GameEndOverlay } from "./GameEndOverlay";
+import { OverallStats } from "./OverallStats";
 import { MatchReview } from "./MatchReview";
 import { ScoringScreen } from "./ScoringScreen";
 import { useMatchPersistence } from "./useMatchPersistence";
@@ -32,6 +33,7 @@ export function ScoringSession({
   });
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [manualEnd, setManualEnd] = useState(false);
+  const [overallOpen, setOverallOpen] = useState(false);
   const persistence = useMatchPersistence({
     playerName,
     opponentName,
@@ -72,6 +74,7 @@ export function ScoringSession({
         onPrimary: () => void viewResults(),
         onSecondary: () => setManualEnd(false),
         onEndMatch: undefined,
+        onShowOverall: undefined,
       }
     : lastCompletedGame
       ? scoring.showMatchEnd
@@ -85,6 +88,7 @@ export function ScoringSession({
             onPrimary: () => void viewResults(),
             onSecondary: scoring.undo,
             onEndMatch: undefined,
+            onShowOverall: undefined,
           }
         : scoring.showGameEnd
           ? {
@@ -97,6 +101,7 @@ export function ScoringSession({
               onPrimary: scoring.acknowledgeGameEnd,
               onSecondary: scoring.undo,
               onEndMatch: () => setConfirmEnd(true),
+              onShowOverall: () => setOverallOpen(true),
             }
           : null
       : null;
@@ -142,6 +147,7 @@ export function ScoringSession({
           onPrimary={overlay.onPrimary}
           onUndo={overlay.onSecondary}
           onEndMatch={overlay.onEndMatch}
+          onShowOverall={overlay.onShowOverall}
         />
       ) : null}
       {scoring.sheet ? (
@@ -177,11 +183,15 @@ export function ScoringSession({
           </div>
         </div>
       ) : null}
+      {overallOpen ? (
+        <OverallStats points={scoring.points} onClose={() => setOverallOpen(false)} />
+      ) : null}
       {scoring.historyOpen ? (
         <MatchReview
           gameNumber={scoring.view.current.gameNumber}
           playerScore={scoring.view.current.playerScore}
           opponentScore={scoring.view.current.opponentScore}
+          points={scoring.points}
           items={scoring.historyItems}
           noPoints={scoring.points.length === 0}
           onClose={scoring.closeHistory}

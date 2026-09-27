@@ -14,6 +14,7 @@ export interface GameEndOverlayProps {
   secondaryLabel?: string;
   onUndo: () => void;
   onEndMatch?: () => void;
+  onShowOverall?: () => void;
 }
 
 export function GameEndOverlay({
@@ -27,6 +28,7 @@ export function GameEndOverlay({
   secondaryLabel = "1点戻す",
   onUndo,
   onEndMatch,
+  onShowOverall,
 }: GameEndOverlayProps) {
   return (
     <div className="game-end-overlay" role="dialog" aria-modal="true" aria-label={kicker}>
@@ -47,6 +49,11 @@ export function GameEndOverlay({
           <button type="button" className="btn btn-primary btn-block" onClick={onPrimary}>
             {primaryLabel}
           </button>
+          {onShowOverall ? (
+            <button type="button" className="btn btn-secondary btn-block" onClick={onShowOverall}>
+              全体集計
+            </button>
+          ) : null}
           {onEndMatch ? (
             <button type="button" className="btn btn-secondary btn-block" onClick={onEndMatch}>
               試合を終了

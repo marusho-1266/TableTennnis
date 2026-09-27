@@ -12,6 +12,12 @@ describe("MatchReview", () => {
     await user.click(screen.getByRole("button", { name: "試合の確認" }));
 
     const review = screen.getByRole("dialog", { name: "試合の確認" });
+    const overall = within(review).getByRole("region", { name: "全体集計" });
+    expect(within(overall).getAllByText("ポイント数").length).toBeGreaterThan(0);
+    expect(within(overall).getAllByText("構成比").length).toBeGreaterThan(0);
+    expect(within(overall).getByText("1")).toBeTruthy();
+    expect(within(overall).getAllByText("100.0%").length).toBeGreaterThan(0);
+    expect(within(overall).getAllByText("0.0%").length).toBeGreaterThan(0);
     expect(within(review).getByText("新しい順・読み取り専用")).toBeTruthy();
     expect(within(review).getByText("G1 1-0")).toBeTruthy();
 

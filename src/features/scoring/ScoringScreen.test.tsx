@@ -42,8 +42,13 @@ describe("ScoringScreen", () => {
   it("distinguishes won and lost actions by mark and border style", () => {
     render(<ScoringScreen {...defaults} />);
 
-    expect(screen.getByRole("button", { name: "得点" }).dataset.outcome).toBe("won");
-    expect(screen.getByRole("button", { name: "失点" }).dataset.outcome).toBe("lost");
+    const won = screen.getByRole("button", { name: "得点" });
+    const lost = screen.getByRole("button", { name: "失点" });
+
+    expect(won.dataset.outcome).toBe("won");
+    expect(lost.dataset.outcome).toBe("lost");
+    expect(won.className).toContain("outcome-won");
+    expect(lost.className).toContain("outcome-lost");
   });
 
   it("shows the deuce notice and empty recent-points state", () => {

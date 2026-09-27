@@ -18,17 +18,19 @@
 }
 
 .scoring-header h1 {
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-family: var(--font-gothic);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
   margin: 0;
 }
 
 .scoring-kicker {
   margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-gothic);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0;
   color: var(--color-accent-700);
   font-variant-numeric: lining-nums tabular-nums;
   font-feature-settings: "lnum", "tnum";
@@ -150,30 +152,41 @@
   cursor: pointer;
   background: transparent;
   border-radius: var(--radius-md);
-  font-family: var(--font-heading);
-  font-weight: 600;
+  font-family: var(--font-gothic);
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .outcome-mark {
-  font-size: 30px;
+  font-family: var(--font-gothic);
+  font-size: 42px;
   line-height: 1;
-  font-weight: 400;
+  font-weight: 700;
+}
+
+.outcome-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .outcome-won {
-  border: 1.5px solid var(--color-accent);
-  color: var(--color-accent-700);
+  border: 2px solid var(--color-won);
+  background: var(--color-won);
+  color: #fff;
 }
 
 .outcome-lost {
-  border: 1.5px dashed var(--color-neutral-700);
-  color: var(--color-neutral-900);
+  border: 2px solid var(--color-lost);
+  background: var(--color-lost);
+  color: #fff;
 }
 
 .utility-grid .btn {
   margin-top: 0;
   min-height: 48px;
+  font-family: var(--font-gothic);
   font-size: 15px;
+  font-weight: 700;
 }
 
 .category-sheet {
@@ -285,6 +298,14 @@
   display: flex;
   flex-direction: column;
   padding: 20px 20px 40px;
+}
+
+.overall-stats {
+  z-index: 55;
+}
+
+.overall-stats .review-list {
+  padding-top: var(--space-4);
 }
 
 .review-caption {
@@ -477,6 +498,9 @@
 
 .summary-screen {
   overflow: auto;
+  font-family: var(--font-gothic);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum", "tnum";
 }
 
 .summary-block {
@@ -489,6 +513,13 @@
   margin-bottom: 12px;
 }
 
+.summary-block h3,
+.summary-screen .point-head,
+.summary-screen .point-mark,
+.summary-screen .game-end-game-line {
+  font-family: var(--font-gothic);
+}
+
 .summary-block h3 {
   font-size: 16px;
   margin: 10px 0 6px;
@@ -497,6 +528,36 @@
 .summary-game-stats,
 .summary-table {
   margin-bottom: 12px;
+}
+
+.summary-count-line,
+.summary-stat-line {
+  display: grid;
+  column-gap: 12px;
+  align-items: baseline;
+}
+
+.summary-count-line {
+  grid-template-columns: minmax(0, 1fr) 6.5em;
+}
+
+.summary-stat-line {
+  grid-template-columns: minmax(0, 1fr) 6.5em 4.5em;
+}
+
+.summary-stat-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-neutral-600);
+  margin-bottom: 2px;
+}
+
+.summary-count,
+.summary-share {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum", "tnum";
 }
 
 .history-list {
