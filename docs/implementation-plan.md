@@ -556,6 +556,77 @@
 
 **Estimated scope:** Medium
 
+## Task 23: ゲームごとの構成比を結果画面に出す
+
+**Description:** 仕様 3.9 のとおり、各ゲームの得点・失点も全体集計と同じ「ポイント数」「構成比」で表示する。分母はそのゲームの得点合計または失点合計にする。
+
+**Acceptance criteria:**
+- [x] 完了ゲームと、ポイントがある未完了ゲームに構成比が出る
+- [x] 構成比は小数第1位で、0件は `0.0%` である
+- [x] ポイント数と構成比は別列で、列名がある
+- [x] 試合全体の集計はこれまでどおり残る
+
+**Verification:**
+- [x] `npx vitest run src/features/match-summary`
+
+**Dependencies:** Task 18
+
+**Files likely touched:**
+- `src/features/match-summary/MatchSummaryScreen.tsx`
+- `src/features/match-summary/MatchSummaryScreen.test.tsx`
+- `src/styles/scoring.css`
+
+**Estimated scope:** Small
+
+## Task 24: 途中終了を試合データとして保存する
+
+**Description:** 3ゲーム先取前の終了を `manualEnd` で表す。既存データに項目が無くても `false` と読み、勝敗はゲーム取得数の比較、同数は引き分けにする。
+
+**Acceptance criteria:**
+- [ ] `manualEnd` が無い保存データは途中終了ではない
+- [ ] 1-0 の途中終了は記録対象の勝利、1-1 は引き分けになる
+- [ ] 未完了ゲームのポイントは集計に含まれ、ゲーム取得数には含まれない
+- [ ] 3ゲーム先取の自動終了は `manualEnd: false` のままである
+
+**Verification:**
+- [ ] `npx vitest run src/domain/match src/storage tests/integration`
+
+**Dependencies:** Task 14, Task 17
+
+**Files likely touched:**
+- `src/domain/match/types.ts`
+- `src/domain/match/derive.ts`
+- `src/storage/matchRepository.ts`
+- `src/features/scoring/useMatchPersistence.ts`
+
+**Estimated scope:** Medium
+
+## Task 25: 試合中に途中終了できる
+
+**Description:** 試合中画面と、試合未確定のゲーム終了オーバーレイに「試合を終了」を置く。確認後に試合終了オーバーレイを出し、結果へ進む前なら「試合に戻る」でポイントを残して再開できる。
+
+**Acceptance criteria:**
+- [ ] 確認をキャンセルしてもポイントは変わらない
+- [ ] 承認後、結果へ進むと完了試合として保存される
+- [ ] 「試合に戻る」はポイントを消さず、途中終了だけを取り消す
+- [ ] 過去一覧に引き分け、またはゲーム取得数に応じた勝敗が出る
+- [ ] ポイント0件でも終了でき、勝敗は引き分けである
+
+**Verification:**
+- [ ] `npx vitest run src/features/scoring src/features/match-history src/features/match-summary`
+- [ ] `npm run lint && npm run typecheck && npm run test && npm run build`
+
+**Dependencies:** Task 23, Task 24
+
+**Files likely touched:**
+- `src/features/scoring/ScoringScreen.tsx`
+- `src/features/scoring/ScoringSession.tsx`
+- `src/features/scoring/GameEndOverlay.tsx`
+- `src/features/match-history/MatchHistoryScreen.tsx`
+- `src/features/match-summary/MatchSummaryScreen.tsx`
+
+**Estimated scope:** Medium
+
 ### Checkpoint: Complete
 
 - [x] 仕様 12. Success Criteria をすべて満たす

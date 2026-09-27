@@ -12,3 +12,7 @@ export function formatPointLine(point: DerivedPoint) {
     body,
   };
 }
+
+export function formatSharePercent(share: number): string {
+  return `${(share * 100).toFixed(1)}%`;
+}

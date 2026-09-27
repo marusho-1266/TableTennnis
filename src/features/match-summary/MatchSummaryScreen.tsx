@@ -1,5 +1,5 @@
 import { deriveMatch } from "../../domain/match/derive";
-import { formatPointLine } from "../../domain/match/format";
+import { formatPointLine, formatSharePercent } from "../../domain/match/format";
 import { deriveStats, type CategoryCount } from "../../domain/match/stats";
 import type { Match } from "../../domain/match/types";
 
@@ -49,8 +49,8 @@ export function MatchSummaryScreen({ match, onBack }: MatchSummaryScreenProps) {
         {stats.games.map((game) => (
           <div key={game.gameNumber} className="summary-game-stats">
             <h3>第{game.gameNumber}ゲーム</h3>
-            <CategoryTable title="得点" items={game.won} />
-            <CategoryTable title="失点" items={game.lost} />
+            <CategoryTable title="得点" items={game.won} showShare />
+            <CategoryTable title="失点" items={game.lost} showShare />
           </div>
         ))}
       </section>
@@ -84,6 +84,16 @@ export function MatchSummaryScreen({ match, onBack }: MatchSummaryScreenProps) {
   );
 }
 
+function rowClass(showShare: boolean, header = false) {
+  return [
+    "game-end-game-line",
+    showShare ? "summary-stat-line" : "summary-count-line",
+    header ? "summary-stat-header" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 function CategoryTable({
   title,
   items,
@@ -96,13 +106,16 @@ function CategoryTable({
   return (
     <div className="summary-table">
       <h3>{title}</h3>
+      <div className={rowClass(showShare, true)}>
+        <span />
+        <span className="summary-count">ポイント数</span>
+        {showShare ? <span className="summary-share">構成比</span> : null}
+      </div>
       {items.map((item) => (
-        <div className="game-end-game-line" key={`${title}-${item.category}`}>
+        <div className={rowClass(showShare)} key={`${title}-${item.category}`}>
           <span>{item.category}</span>
-          <span>
-            {item.count}
-            {showShare ? ` ${Math.round(item.share * 100)}%` : ""}
-          </span>
+          <span className="summary-count">{item.count}</span>
+          {showShare ? <span className="summary-share">{formatSharePercent(item.share)}</span> : null}
         </div>
       ))}
     </div>
