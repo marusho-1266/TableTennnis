@@ -12,26 +12,35 @@ describe("deriveStats", () => {
     expect(stats.overall.lost.every((item) => item.count === 0 && item.share === 0)).toBe(true);
   });
 
-  it("counts every category per game and overall", () => {
+  it("counts details within each game and major categories overall", () => {
     const points: PointInput[] = [
-      point("won", "ラリー（5球目以降）"),
-      point("won", "ラリー（5球目以降）"),
-      point("won", "サーブ"),
-      point("lost", "ラリー"),
+      point("won", "ラリー（5球目以降）", null),
+      point("won", "ラリー（5球目以降）", null),
+      point("won", "サーブ", "エース"),
+      point("lost", "ラリー", null),
+      point("lost", "サーブミス", "ネット"),
     ];
 
     const stats = deriveStats(points);
     const game1 = stats.games[0];
     const rallyWon = game1?.won.find((item) => item.category === "ラリー（5球目以降）");
-    const serveWon = game1?.won.find((item) => item.category === "サーブ");
+    const ace = game1?.won.find((item) => item.detail === "エース");
+    const otherServe = game1?.won.find((item) => item.detail === "相手レシーブミス");
     const lostRally = game1?.lost.find((item) => item.category === "ラリー");
-    const unusedLost = game1?.lost.find((item) => item.category === "サーブミス");
+    const net = game1?.lost.find((item) => item.detail === "ネット");
+    const unusedLost = game1?.lost.find((item) => item.detail === "オーバー");
 
     expect(stats.games).toHaveLength(1);
-    expect(rallyWon).toMatchObject({ count: 2, share: 2 / 3 });
-    expect(serveWon).toMatchObject({ count: 1, share: 1 / 3 });
-    expect(lostRally).toMatchObject({ count: 1, share: 1 });
+    expect(rallyWon).toMatchObject({ detail: null, count: 2, share: 2 / 3 });
+    expect(ace).toMatchObject({ count: 1, share: 1 / 3 });
+    expect(otherServe).toMatchObject({ count: 0, share: 0 });
+    expect(lostRally).toMatchObject({ detail: null, count: 1, share: 1 / 2 });
+    expect(net).toMatchObject({ count: 1, share: 1 / 2 });
     expect(unusedLost).toMatchObject({ count: 0, share: 0 });
+    expect(stats.overall.won.find((item) => item.category === "サーブ")).toMatchObject({
+      count: 1,
+      share: 1 / 3,
+    });
     expect(stats.overall.won.find((item) => item.category === "3球目")).toMatchObject({
       count: 0,
       share: 0,
@@ -39,6 +48,15 @@ describe("deriveStats", () => {
   });
 });
 
-function point(outcome: PointInput["outcome"], category: string): PointInput {
-  return { id: `${outcome}-${category}-${Math.random()}`, outcome, category, detail: null };
+function point(
+  outcome: PointInput["outcome"],
+  category: string,
+  detail: string | null,
+): PointInput {
+  return {
+    id: `${outcome}-${category}-${detail ?? "none"}-${Math.random()}`,
+    outcome,
+    category,
+    detail,
+  };
 }

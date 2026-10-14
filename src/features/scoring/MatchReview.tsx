@@ -1,6 +1,7 @@
 import type { PointInput } from "../../domain/match/derive";
 import { deriveStats } from "../../domain/match/stats";
 import { CategoryTable } from "./CategoryTable";
+import { GameStatsList } from "./GameStatsList";
 import type { PointLineView } from "./ScoringScreen";
 
 export interface MatchReviewProps {
@@ -33,6 +34,12 @@ export function MatchReview({
         </p>
       </header>
       <div className="review-list">
+        {stats.games.length > 0 ? (
+          <section className="summary-block" aria-label="ゲーム別集計">
+            <h2>ゲーム別集計</h2>
+            <GameStatsList games={stats.games} />
+          </section>
+        ) : null}
         <section className="summary-block" aria-label="全体集計">
           <h2>全体集計</h2>
           <CategoryTable title="得点" items={stats.overall.won} />

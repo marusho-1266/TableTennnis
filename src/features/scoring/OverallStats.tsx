@@ -2,6 +2,7 @@ import { deriveMatch, type PointInput } from "../../domain/match/derive";
 import { formatPointLine } from "../../domain/match/format";
 import { deriveStats } from "../../domain/match/stats";
 import { CategoryTable } from "./CategoryTable";
+import { GameStatsList } from "./GameStatsList";
 
 export interface OverallStatsProps {
   points: PointInput[];
@@ -18,8 +19,17 @@ export function OverallStats({ points, onClose }: OverallStatsProps) {
         <h1>全体集計</h1>
       </header>
       <div className="review-list">
-        <CategoryTable title="得点" items={stats.overall.won} />
-        <CategoryTable title="失点" items={stats.overall.lost} />
+        {stats.games.length > 0 ? (
+          <section className="summary-block" aria-label="ゲーム別集計">
+            <h2>ゲーム別集計</h2>
+            <GameStatsList games={stats.games} />
+          </section>
+        ) : null}
+        <section className="summary-block" aria-label="全体集計">
+          <h2>全体集計</h2>
+          <CategoryTable title="得点" items={stats.overall.won} />
+          <CategoryTable title="失点" items={stats.overall.lost} />
+        </section>
         <section className="summary-block" aria-label="ポイント履歴">
           <h2>ポイント履歴</h2>
           <p className="review-caption">新しい順・読み取り専用</p>

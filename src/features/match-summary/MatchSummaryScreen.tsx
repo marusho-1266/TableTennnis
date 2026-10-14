@@ -2,6 +2,7 @@ import { deriveMatch } from "../../domain/match/derive";
 import { matchOutcome } from "../../domain/match/result";
 import { formatPointLine, formatSharePercent } from "../../domain/match/format";
 import { deriveStats, type CategoryCount } from "../../domain/match/stats";
+import { GameStatsList } from "../scoring/GameStatsList";
 import type { Match } from "../../domain/match/types";
 
 export interface MatchSummaryScreenProps {
@@ -47,13 +48,7 @@ export function MatchSummaryScreen({ match, onBack }: MatchSummaryScreenProps) {
 
       <section className="summary-block">
         <h2>ゲーム別集計</h2>
-        {stats.games.map((game) => (
-          <div key={game.gameNumber} className="summary-game-stats">
-            <h3>第{game.gameNumber}ゲーム</h3>
-            <CategoryTable title="得点" items={game.won} showShare />
-            <CategoryTable title="失点" items={game.lost} showShare />
-          </div>
-        ))}
+        <GameStatsList games={stats.games} />
       </section>
 
       <section className="summary-block">

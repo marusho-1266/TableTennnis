@@ -39,7 +39,9 @@ describe("MatchSummaryScreen", () => {
 
     expect(within(perGame).getAllByText("ポイント数").length).toBeGreaterThan(0);
     expect(within(perGame).getAllByText("構成比").length).toBeGreaterThan(0);
+    expect(within(perGame).getAllByText("エース").length).toBeGreaterThan(0);
     expect(within(perGame).getAllByText("50.0%").length).toBeGreaterThan(0);
+    expect(within(overall).queryByText("エース")).toBeNull();
     expect(within(perGame).getAllByText("0.0%").length).toBeGreaterThan(0);
     expect(within(perGame).queryByText("92.3%")).toBeNull();
     expect(within(overall).getByText("92.3%")).toBeTruthy();
@@ -60,8 +62,8 @@ function mixedGameMatch(): Match {
   for (let score = 1; score <= 11; score += 1) {
     points.push(point(points.length + 1, "ラリー（5球目以降）", score, 0));
   }
-  points.push(point(points.length + 1, "サーブ", 1, 0));
-  points.push(point(points.length + 1, "ラリー（5球目以降）", 2, 0));
+    points.push(point(points.length + 1, "サーブ", 1, 0, "エース"));
+    points.push(point(points.length + 1, "ラリー（5球目以降）", 2, 0));
 
   return {
     id: "match-mixed",
@@ -75,14 +77,20 @@ function mixedGameMatch(): Match {
   };
 }
 
-function point(sequence: number, category: string, player: number, opponent: number): Point {
+function point(
+  sequence: number,
+  category: string,
+  player: number,
+  opponent: number,
+  detail: string | null = null,
+): Point {
   return {
     id: `p${sequence}`,
     sequence,
     gameNumber: 1,
     outcome: "won",
     category,
-    detail: null,
+    detail,
     scoreAfter: { player, opponent },
     recordedAt: "2026-09-17T13:00:00.000Z",
   };

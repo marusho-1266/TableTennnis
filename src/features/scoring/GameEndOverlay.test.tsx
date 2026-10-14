@@ -115,7 +115,10 @@ describe("game end acknowledgement", () => {
     const stats = screen.getByRole("dialog", { name: "全体集計" });
     expect(within(stats).getAllByText("ポイント数").length).toBeGreaterThan(0);
     expect(within(stats).getAllByText("構成比").length).toBeGreaterThan(0);
-    expect(within(stats).getByText("11")).toBeTruthy();
+    expect(within(stats).getAllByText("11").length).toBeGreaterThan(0);
+    const perGame = within(stats).getByRole("region", { name: "ゲーム別集計" });
+    expect(within(perGame).getByText("第1ゲーム")).toBeTruthy();
+    expect(within(perGame).getByText("エース")).toBeTruthy();
     expect(within(stats).getAllByText("100.0%").length).toBeGreaterThan(0);
     expect(within(stats).getAllByText("0.0%").length).toBeGreaterThan(0);
     const history = within(stats).getByRole("region", { name: "ポイント履歴" });
